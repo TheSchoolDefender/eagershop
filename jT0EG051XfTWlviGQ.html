@@ -1,0 +1,1517 @@
+<html><head><base href=""/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+:root {
+  --dark-green: #1a472a;
+  --metallic-orange: #d4802c;
+  --gray: #808080;
+  --metallic-gray: #a8a9ad;
+  --navy-blue: #1B2A4A;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--navy-blue);
+  color: white;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--metallic-orange) var(--navy-blue);
+}
+
+body::-webkit-scrollbar {
+  width: 6px;
+}
+
+body::-webkit-scrollbar-track {
+  background: rgba(27, 42, 74, 0.5);
+}
+
+body::-webkit-scrollbar-thumb {
+  background: var(--metallic-orange);
+  border-radius: 10px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: #ff9933;
+  cursor: pointer;
+}
+
+.sidebar {
+  height: 100vh;
+  width: 240px;
+  position: fixed;
+  background: linear-gradient(135deg, var(--navy-blue), #0d1525);
+  padding: 20px;
+  box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+  animation: sidebarGlow 2s infinite alternate;
+}
+
+@keyframes sidebarGlow {
+  from { box-shadow: 0 0 10px var(--metallic-orange); }
+  to { box-shadow: 0 0 20px var(--metallic-orange); }
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: white;
+  padding: 20px;
+  text-decoration: none;
+  margin: 15px 0;
+  background: linear-gradient(to right, var(--navy-blue), rgba(27, 42, 74, 0.7));
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  border: 2px solid transparent;
+}
+
+.sidebar a:hover {
+  border-color: var(--metallic-orange);
+  transform: translateX(10px);
+  background: linear-gradient(to right, var(--navy-blue), var(--dark-green));
+}
+
+.sidebar a i {
+  font-size: 24px;
+  color: var(--metallic-orange);
+}
+
+.content {
+  margin-left: 280px;
+  padding: 40px;
+  min-height: 100vh;
+}
+
+.welcome {
+  text-align: center;
+  margin-top: 50px;
+  animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.welcome h1 {
+  font-size: 64px;
+  color: var(--metallic-orange);
+  text-shadow: 3px 3px var(--metallic-gray), 6px 6px rgba(0,0,0,0.2);
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 30px;
+}
+
+.welcome p {
+  font-size: 20px;
+  color: var(--metallic-gray);
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.username-form {
+  text-align: center;
+  margin-top: 50px;
+  padding: 30px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 15px;
+  backdrop-filter: blur(5px);
+}
+
+.username-form input {
+  padding: 15px 25px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  background: var(--metallic-gray);
+  color: var(--dark-green);
+  margin-right: 10px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.username-form button {
+  padding: 15px 30px;
+  font-size: 18px;
+  background: var(--metallic-orange);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.username-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+#wheel {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: block;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--navy-blue);
+  margin-bottom: 60px; /* Space between wheel and shop section */
+}
+
+#shop {
+  display: block;
+  margin-bottom: 100px;
+}
+
+#buy {
+  display: block;
+  margin-bottom: 100px;
+}
+
+.bet-container {
+  position: relative; /* Change from fixed to relative */
+  bottom: auto; /* Remove fixed bottom */
+  left: auto; /* Remove fixed left */
+  transform: none; /* Remove transform */
+  margin: 40px auto; /* Add margin for spacing */
+  background: var(--navy-blue);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+  border: 2px solid var(--metallic-orange);
+  z-index: 100;
+  width: 80%;
+  max-width: 500px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+#bet-amount {
+  padding: 20px;
+  font-size: 24px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.95);
+  color: var(--dark-green);
+  width: 200px;
+  text-align: center;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.bet-container button {
+  padding: 20px 40px;
+  font-size: 24px;
+  background: var(--navy-blue);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.bet-container button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  background: var(--metallic-orange);
+}
+
+.emoji-spinner {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 48px;
+  margin: 30px 0; /* Reduce top margin since bet container will be below */
+}
+
+.emoji-box {
+  width: 100px;
+  height: 100px;
+  font-size: 60px;
+  background: linear-gradient(135deg, var(--metallic-gray), var(--navy-blue));
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  border: 3px solid var(--metallic-orange);
+}
+
+.hidden {
+  display: none;
+}
+
+.buy-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.buy-container::-webkit-scrollbar {
+  display: none;
+}
+
+.buy-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 30px;
+  background: linear-gradient(135deg, var(--navy-blue), #0d1525);
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  border: 2px solid var(--metallic-orange);
+  transition: all 0.3s ease;
+}
+
+.buy-option:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(212, 128, 44, 0.3);
+}
+
+.buy-option img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+}
+
+.buy-option span {
+  font-size: 24px;
+  color: var(--metallic-orange);
+  font-weight: bold;
+}
+
+.buy-option button {
+  padding: 15px 30px;
+  font-size: 18px;
+  background: var(--metallic-orange);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.buy-option button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px var(--metallic-orange);
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.prestige-rank {
+  background: linear-gradient(45deg, var(--navy-blue), #0d1525) !important;
+  border: 2px solid var(--metallic-orange) !important;
+  transform-style: preserve-3d;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.prestige-rank:hover {
+  transform: translateY(-10px) rotate3d(1, 1, 0, 15deg) !important;
+  box-shadow: 0 15px 30px rgba(212, 128, 44, 0.3) !important;
+}
+
+.prestige-rank .emoji {
+  font-size: 64px !important;
+  margin: 20px 0;
+  animation: float 3s ease-in-out infinite;
+}
+
+.prestige-rank h3 {
+  color: var(--metallic-orange);
+  font-size: 24px;
+  margin: 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.prestige-rank p {
+  color: var(--metallic-gray);
+  margin: 10px 0;
+}
+
+.prestige-rank .price {
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 10px var(--metallic-orange);
+}
+
+.rank-button {
+  background: linear-gradient(45deg, var(--metallic-orange), #ff9933) !important;
+  border: none;
+  padding: 15px 30px !important;
+  border-radius: 25px !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease !important;
+}
+
+.rank-button:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 0 20px var(--metallic-orange) !important;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Add a special animation for purchase success */
+@keyframes purchaseSuccess {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.purchase-success {
+  animation: purchaseSuccess 0.5s ease;
+}
+
+.shop-item {
+  background: linear-gradient(135deg, var(--navy-blue), #0d1525);
+  padding: 20px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  border: 2px solid var(--metallic-gray);
+}
+
+.shop-item:hover {
+  transform: translateY(-5px);
+  border-color: var(--metallic-orange);
+}
+
+.shop-item .emoji {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.shop-item .price {
+  color: var(--metallic-orange);
+  font-weight: bold;
+}
+
+.shop-item button {
+  padding: 10px 20px;
+  background: var(--metallic-orange);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.shop-item button:hover {
+  transform: scale(1.05);
+}
+
+.section-title {
+  font-size: 48px;
+  color: var(--metallic-orange);
+  text-align: center;
+  margin-bottom: 60px;
+  text-transform: uppercase;
+  text-shadow: 3px 3px var(--metallic-gray), 6px 6px rgba(0,0,0,0.2);
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.welcome-back {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--navy-blue);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeOut 2s forwards;
+  animation-delay: 3s;
+}
+
+.welcome-back h1 {
+  font-size: 48px;
+  color: var(--metallic-orange);
+  text-align: center;
+  margin-bottom: 20px;
+  text-shadow: 3px 3px var(--metallic-gray);
+  animation: bounce 1s infinite alternate;
+}
+
+.welcome-back p {
+  font-size: 24px;
+  color: white;
+  text-align: center;
+  max-width: 600px;
+  line-height: 1.6;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.stars {
+  position: absolute;
+  font-size: 24px;
+  animation: twinkle 1.5s infinite alternate;
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}
+
+@keyframes bounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-10px); }
+}
+
+@keyframes twinkle {
+  from { opacity: 0.3; }
+  to { opacity: 1; }
+}
+
+.battle-pass {
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 20px;
+  padding-bottom: 20px;
+}
+
+.battle-pass-item {
+  min-width: 250px;
+  width: 250px;
+  height: 250px;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--navy-blue);
+  border: 2px solid var(--metallic-gray);
+  padding: 20px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.battle-pass-item:hover {
+  border-color: var(--metallic-orange);
+  transform: translateY(-10px);
+}
+
+.battle-pass-item.completed {
+  border-color: #4CAF50;
+  opacity: 0.7;
+}
+
+.item-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 15px;
+}
+
+.item-emoji {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.item-details h3 {
+  margin: 0;
+  color: var(--metallic-orange);
+  font-size: 20px;
+}
+
+.unlock-button {
+  position: absolute;
+  bottom: 20px;
+  padding: 10px 20px;
+  background: var(--metallic-orange);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.unlock-button:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.unlock-button:disabled {
+  background: var(--metallic-gray);
+  cursor: not-allowed;
+}
+
+.transactions-panel {
+  padding: 40px;
+  display: none;
+}
+
+.transaction-list {
+  background: var(--navy-blue);
+  border: 2px solid var(--metallic-orange);
+  border-radius: 15px;
+  padding: 20px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.transaction-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.transaction-item span {
+  color: var(--metallic-orange);
+  font-weight: bold;
+}
+
+.admin-gift-panel {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 20px;
+}
+
+.admin-controls {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.admin-controls input {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: var(--metallic-gray);
+  color: var(--dark-green);
+}
+
+.admin-controls button {
+  padding: 10px 20px;
+  background: var(--metallic-orange);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.admin-controls button:hover {
+  transform: scale(1.05);
+}
+
+#gift-status {
+  color: var(--metallic-orange);
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.redeem-code-section {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+}
+
+.redeem-controls {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.redeem-controls input {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: var(--metallic-gray);
+  color: var(--dark-green);
+}
+
+.redeem-controls button {
+  padding: 10px 20px;
+  background: var(--metallic-orange);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.admin-code-generator {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 2px solid var(--metallic-orange);
+}
+
+.generated-codes-list {
+  margin-top: 20px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+#generated-code {
+  margin: 15px 0;
+  font-size: 1.2em;
+  color: var(--metallic-orange);
+}
+
+#active-codes-list {
+  margin-top: 10px;
+}
+
+.code-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 5px 0;
+  border-radius: 4px;
+}
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <a href="#home"><i class="fas fa-home"></i> Home</a>
+  <a href="#wheel"><i class="fas fa-dharmachakra"></i> Wheel</a>
+  <a href="#shop"><i class="fas fa-store"></i> Shop</a>
+  <a href="#buy"><i class="fas fa-coins"></i> Buy</a>
+  <a href="#transactions" id="admin-transactions" style="display: none;"><i class="fas fa-list"></i> Transactions</a>
+</div>
+
+<div class="content">
+  <div id="home">
+    <h1 class="section-title">BATTLE PASS</h1>
+    <div class="battle-pass">
+      <div class="battle-pass-item" data-price="20">
+        <div class="item-info">
+          <div class="item-emoji">🖐️</div>
+          <div class="item-details">
+            <h3>A High Five</h3>
+            <div class="item-price">20 EC</div>
+          </div>
+        </div>
+        <button class="unlock-button" onclick="unlockBattlePassItem(0)">Unlock</button>
+      </div>
+      
+      <div class="battle-pass-item" data-price="25">
+        <div class="item-info">
+          <div class="item-emoji">👊</div>
+          <div class="item-details">
+            <h3>Fist Bump</h3>
+            <div class="item-price">25 EC</div>
+          </div>
+        </div>
+        <button class="unlock-button" onclick="unlockBattlePassItem(1)" disabled>Unlock</button>
+      </div>
+      
+      <div class="battle-pass-item" data-price="30">
+        <div class="item-info">
+          <div class="item-emoji">🤝</div>
+          <div class="item-details">
+            <h3>Hand Shake</h3>
+            <div class="item-price">30 EC</div>
+          </div>
+        </div>
+        <button class="unlock-button" onclick="unlockBattlePassItem(2)" disabled>Unlock</button>
+      </div>
+      
+      <div class="battle-pass-item" data-price="35">
+        <div class="item-info">
+          <div class="item-emoji">👏</div>
+          <div class="item-details">
+            <h3>Pat on the Back</h3>
+            <div class="item-price">35 EC</div>
+          </div>
+        </div>
+        <button class="unlock-button" onclick="unlockBattlePassItem(3)" disabled>Unlock</button>
+      </div>
+
+      <div class="battle-pass-item" data-price="40">
+        <div class="item-info">
+          <div class="item-emoji">👏</div>
+          <div class="item-details">
+            <h3>Round of Applause</h3>
+            <div class="item-price">40 EC</div>
+          </div>
+        </div>
+        <button class="unlock-button" onclick="unlockBattlePassItem(4)" disabled>Unlock</button>
+      </div>
+
+      <div class="battle-pass-item" data-price="45">
+        <div class="item-info">
+          <div class="item-emoji">📖</div>
+          <div class="item-details">
+            <h3>The Book Eager Chapter 1</h3>
+            <div class="item-price">45 EC</div>
+          </div>
+        </div>
+        <button class="unlock-button" onclick="unlockBattlePassItem(5)" disabled>Unlock</button>
+      </div>
+
+      <div class="battle-pass-item" data-price="50">
+        <div class="item-info">
+          <div class="item-emoji">🎁</div>
+          <div class="item-details">
+            <h3>Mystery Chest</h3>
+            <div class="item-price">50 EC</div>
+          </div>
+        </div>
+        <button class="unlock-button" onclick="unlockBattlePassItem(6)" disabled>Unlock</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="welcome" class="welcome">
+    <h1>WELCOME TO THE EAGER WEB</h1>
+    <p>Welcome to the official Eager shop! Here you can spend your Eager Coins (EC) on various rewards and try your luck at the emoji spinner!</p>
+    <div class="username-form">
+      <input type="text" id="username-input" placeholder="Enter a username">
+      <button onclick="checkUsername()">Begin Journey</button>
+    </div>
+  </div>
+
+  <div id="main-content">
+    <div id="wheel">
+      <h1 class="section-title">EAGER WHEEL</h1>
+      <div class="bet-container">
+        <input type="number" id="bet-amount" placeholder="Bet Amount">
+        <button onclick="spin()">Spin!</button>
+      </div>
+      <div class="emoji-spinner" id="emoji-spinner">
+        <div class="emoji-box">🎉</div>
+        <div class="emoji-box">❌</div>
+        <div class="emoji-box">🎉</div>
+        <div class="emoji-box">❌</div>
+        <div class="emoji-box">🎉</div>
+      </div>
+      <p id="spinner-result"></p>
+    </div>
+
+    <div id="shop">
+      <h1 class="section-title">Reward Shop</h1>
+      <div class="redeem-code-section">
+        <h2>Redeem Gift Code</h2>
+        <div class="redeem-controls">
+          <input type="text" id="gift-code" placeholder="Enter Gift Code">
+          <button onclick="redeemCode()">Redeem</button>
+        </div>
+        <div id="redeem-status"></div>
+      </div>
+      <div class="shop-grid">
+        <div class="shop-item prestige-rank">
+          <div class="emoji">👑</div>
+          <h3>VIP Rank</h3>
+          <p>Exclusive status and perks!</p>
+          <p class="price">500 EC</p>
+          <button onclick="buyItem('VIP Rank', 500)" class="rank-button">Purchase</button>
+        </div>
+        <div class="shop-item prestige-rank">
+          <div class="emoji">🌟</div>
+          <h3>MVP Rank</h3>
+          <p>Show off your legendary status!</p>
+          <p class="price">1000 EC</p>
+          <button onclick="buyItem('MVP Rank', 1000)" class="rank-button">Purchase</button>
+        </div>
+        <div class="shop-item prestige-rank">
+          <div class="emoji">🧀</div>
+          <h3>Cheese Rank</h3>
+          <p>For the true cheese enthusiasts!</p>
+          <p class="price">1000 EC</p>
+          <button onclick="buyItem('Cheese Rank', 1000)" class="rank-button">Purchase</button>
+        </div>
+        <div class="shop-item prestige-rank">
+          <div class="emoji">⚡</div>
+          <h3>Eager Rank</h3>
+          <p>Show your true Eager spirit!</p>
+          <p class="price">2000 EC</p>
+          <button onclick="buyItem('Eager Rank', 2000)" class="rank-button">Purchase</button>
+        </div>
+        <div class="shop-item prestige-rank">
+          <div class="emoji">😎</div>
+          <h3>Chill Guy Rank</h3>
+          <p>The ultimate flex - pure chill vibes!</p>
+          <p class="price">10000 EC</p>
+          <button onclick="buyItem('Chill Guy Rank', 10000)" class="rank-button">Purchase</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="buy">
+      <h1 class="section-title">Buy Eager Coins</h1>
+      <div class="buy-container">
+        <div class="buy-option">
+          <img src="https://i.postimg.cc/XvjZpgHJ/eager-coins.png">
+          <span>$5.00 (500 EC)</span>
+          <button onclick="buyEC(500, 5)">Buy Now</button>
+        </div>
+        <div class="buy-option">
+          <img src="https://i.postimg.cc/VNKJMbpF/stack-of-eager-coins.png">
+          <span>$10.00 (1500 EC)</span>
+          <button onclick="buyEC(1500, 10)">Buy Now</button>
+        </div>
+        <div class="buy-option">
+          <img src="https://i.postimg.cc/jSQwx1hm/chest-of-eager-coins.png">
+          <span>$20.00 (3000 EC)</span>
+          <button onclick="buyEC(3000, 20)">Buy Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="transactions" class="transactions-panel">
+      <h1 class="section-title">Transaction History</h1>
+      <div class="transaction-list" id="transaction-list">
+        <!-- Transactions will be populated here -->
+      </div>
+      <div class="admin-gift-panel">
+        <h2>Gift EC to Users</h2>
+        <div class="admin-controls">
+          <input type="text" id="gift-username" placeholder="Username">
+          <input type="number" id="gift-amount" placeholder="EC Amount">
+          <button onclick="giftEC()">Send EC</button>
+        </div>
+        <div id="gift-status"></div>
+        <div class="admin-code-generator">
+          <h2>Generate Gift Codes</h2>
+          <div class="admin-controls">
+            <input type="number" id="code-amount" placeholder="EC Amount">
+            <button onclick="generateGiftCode()">Generate Code</button>
+          </div>
+          <div id="generated-code"></div>
+          <div class="generated-codes-list">
+            <h3>Active Gift Codes</h3>
+            <div id="active-codes-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const gun = Gun();
+let currentUsername = localStorage.getItem('currentUsername') || '';
+let balance = 100;
+let battlePassProgress = 0;
+
+// Object to store transactions
+let transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+
+// Gun DB for gift codes
+let giftCodesDB = gun.get('eagerGiftCodes'); // Changed from 'giftCodes' to make it globally shared
+
+if(currentUsername) {
+  const savedBalance = localStorage.getItem(`${currentUsername}_balance`);
+  if(savedBalance) {
+    balance = parseInt(savedBalance);
+    document.getElementById('welcome').classList.add('hidden');
+    document.getElementById('main-content').classList.remove('hidden');
+    document.getElementById('main-content').classList.add('slide-in');
+  }
+}
+
+function loadPurchasedRanks() {
+  const saved = localStorage.getItem(`${currentUsername}_ranks`);
+  return saved ? JSON.parse(saved) : {};
+}
+
+function savePurchasedRanks(ranks) {
+  localStorage.setItem(`${currentUsername}_ranks`, JSON.stringify(ranks));
+}
+
+function loadEquippedRank() {
+  return localStorage.getItem(`${currentUsername}_equipped_rank`);
+}
+
+function saveEquippedRank(rank) {
+  localStorage.setItem(`${currentUsername}_equipped_rank`, rank);
+}
+
+function updateBalance(newBalance) {
+  balance = newBalance;
+  localStorage.setItem(`${currentUsername}_balance`, balance);
+  
+  const balanceDisplay = document.createElement('div');
+  balanceDisplay.style.position = 'fixed';
+  balanceDisplay.style.top = '20px';
+  balanceDisplay.style.right = '20px';
+  balanceDisplay.style.background = 'var(--metallic-orange)';
+  balanceDisplay.style.padding = '10px 20px';
+  balanceDisplay.style.borderRadius = '8px';
+  balanceDisplay.style.fontWeight = 'bold';
+  balanceDisplay.style.zIndex = '1000';
+  balanceDisplay.textContent = `Balance: ${balance} EC`;
+  
+  const existingBalance = document.querySelector('.balance-display');
+  if (existingBalance) {
+    existingBalance.remove();
+  }
+  
+  balanceDisplay.classList.add('balance-display');
+  document.body.appendChild(balanceDisplay);
+}
+
+function unlockBattlePassItem(level) {
+  const prices = [20, 25, 30, 35, 40, 45, 50];
+  const items = ["High Five", "Fist Bump", "Hand Shake", "Pat on the Back", 
+                "Round of Applause", "The Book Eager Chapter 1", "Mystery Chest"];
+  
+  if (level !== battlePassProgress) {
+    alert("Complete previous items first!");
+    return;
+  }
+  
+  const price = prices[level];
+  
+  if (balance >= price) {
+    if (confirm(`Unlock ${items[level]} for ${price} EC?`)) {
+      updateBalance(balance - price);
+      battlePassProgress++;
+      saveBattlePassProgress();
+      addTransaction(currentUsername, items[level], price);
+      
+      // If it's the final chest
+      if (level === 6) {
+        const rewards = [0, 20, 40, 50, 100, 250];
+        const reward = rewards[Math.floor(Math.random() * rewards.length)];
+        updateBalance(balance + reward);
+        alert(`You got ${reward} EC from the Mystery Chest!`);
+      }
+      
+      // Update UI
+      document.querySelectorAll('.battle-pass-item').forEach((item, index) => {
+        const button = item.querySelector('.unlock-button');
+        if (index < battlePassProgress) {
+          item.classList.add('completed');
+          button.disabled = true;
+          button.textContent = 'Unlocked';
+        } else if (index === battlePassProgress) {
+          button.disabled = false;
+          button.textContent = 'Unlock';
+        } else {
+          button.disabled = true;
+          button.textContent = 'Locked';
+        }
+      });
+      
+      alert(`Successfully unlocked ${items[level]}!`);
+    }
+  } else {
+    alert('Not enough EC!');
+  }
+}
+
+// Save battle pass progress
+function saveBattlePassProgress() {
+  localStorage.setItem(`${currentUsername}_battlepass`, battlePassProgress);
+}
+
+// Load battle pass progress
+function loadBattlePassProgress() {
+  const saved = localStorage.getItem(`${currentUsername}_battlepass`);
+  if (saved) {
+    battlePassProgress = parseInt(saved);
+    // Update UI based on progress
+    document.querySelectorAll('.battle-pass-item').forEach((item, index) => {
+      const button = item.querySelector('.unlock-button');
+      if (index < battlePassProgress) {
+        item.classList.add('completed');
+        button.disabled = true;
+        button.textContent = 'Unlocked';
+      } else if (index === battlePassProgress) {
+        button.disabled = false;
+        button.textContent = 'Unlock';
+      } else {
+        button.disabled = true;
+        button.textContent = 'Locked';
+      }
+    });
+  }
+}
+
+// Add a transaction
+function addTransaction(username, item, cost) {
+  const transaction = {
+    username,
+    item,
+    cost,
+    timestamp: new Date().toISOString()
+  };
+  transactions.push(transaction);
+  localStorage.setItem('transactions', JSON.stringify(transactions));
+  updateTransactionsList();
+}
+
+// Function to update transactions list
+function updateTransactionsList() {
+  const transactionList = document.getElementById('transaction-list');
+  if (!transactionList) return;
+
+  transactionList.innerHTML = transactions.map(t => `
+    <div class="transaction-item">
+      <div>
+        <strong>${t.username}</strong> purchased <span>${t.item}</span>
+      </div>
+      <div>
+        <span>${t.cost} EC</span>
+        <small>${new Date(t.timestamp).toLocaleString()}</small>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Function to gift EC to users
+function giftEC() {
+  const username = document.getElementById('gift-username').value;
+  const amount = parseInt(document.getElementById('gift-amount').value);
+  
+  if (!username || isNaN(amount)) {
+    alert('Please enter valid username and amount');
+    return;
+  }
+
+  const userBalance = localStorage.getItem(`${username}_balance`);
+  if (userBalance !== null) {
+    const newBalance = parseInt(userBalance) + amount;
+    localStorage.setItem(`${username}_balance`, newBalance);
+    addTransaction('EagerADMIN', `Gifted ${amount} EC to ${username}`, 0);
+    document.getElementById('gift-status').textContent = `Successfully gifted ${amount} EC to ${username}`;
+    setTimeout(() => {
+      document.getElementById('gift-status').textContent = '';
+    }, 3000);
+  } else {
+    alert('User not found!');
+  }
+}
+
+function generateGiftCode() {
+  if (currentUsername !== 'EagerADMIN') return;
+  
+  const amount = parseInt(document.getElementById('code-amount').value);
+  if (!amount || amount <= 0) {
+    alert('Please enter a valid EC amount');
+    return;
+  }
+
+  const code = Math.random().toString(36).substring(2, 10).toUpperCase();
+  
+  // Store the code with global accessibility
+  giftCodesDB.get(code).put({
+    amount: amount,
+    active: true,
+    created: new Date().toISOString(),
+    createdBy: 'EagerADMIN'
+  }, (ack) => {
+    if (ack.err) {
+      alert('Error generating code. Please try again.');
+      return;
+    }
+    
+    document.getElementById('generated-code').textContent = `Generated Code: ${code}`;
+    document.getElementById('generated-code').style.color = '#4CAF50';
+    document.getElementById('code-amount').value = '';
+    
+    // Update the active codes list
+    updateActiveCodesList();
+  });
+}
+
+function updateActiveCodesList() {
+  const list = document.getElementById('active-codes-list');
+  if (!list || currentUsername !== 'EagerADMIN') return;
+  
+  list.innerHTML = ''; // Clear existing list
+  
+  giftCodesDB.map().once((data, code) => {
+    if (data && data.active) {
+      const codeItem = document.createElement('div');
+      codeItem.className = 'code-item';
+      codeItem.innerHTML = `
+        <span>${code} (${data.amount} EC)</span>
+        <button onclick="deleteCode('${code}')">Delete</button>
+      `;
+      list.appendChild(codeItem);
+    }
+  });
+}
+
+function deleteCode(code) {
+  if (currentUsername !== 'EagerADMIN') return;
+  
+  giftCodesDB.get(code).put({
+    active: false,
+    deletedAt: new Date().toISOString(),
+    deletedBy: 'EagerADMIN'
+  });
+  
+  updateActiveCodesList();
+}
+
+function redeemCode() {
+  const code = document.getElementById('gift-code').value.toUpperCase();
+  const status = document.getElementById('redeem-status');
+  
+  if (!code) {
+    status.textContent = 'Please enter a code';
+    return;
+  }
+
+  // Special case for SIGMAEAGER69
+  if (code === 'SIGMAEAGER69') {
+    updateBalance(balance + 10000);
+    status.textContent = '🎉 SECRET CODE: You received 10,000 EC! Welcome to the elite! 🎉';
+    status.style.color = '#4CAF50';
+    document.getElementById('gift-code').value = '';
+    addTransaction(currentUsername, `Redeemed Special Code: ${code}`, 10000);
+    return;
+  }
+  
+  // Rest of the existing redeemCode function...
+  
+  giftCodesDB.get(code).once((giftCode) => {
+    if (!giftCode || !giftCode.active) {
+      status.textContent = 'Invalid or expired code';
+      status.style.color = '#f44336';
+      return;
+    }
+    
+    // Add the EC amount to user's balance
+    updateBalance(balance + giftCode.amount);
+    
+    // Deactivate the code
+    giftCodesDB.get(code).put({
+      amount: giftCode.amount,
+      active: false,
+      redeemedBy: currentUsername,
+      redeemedAt: new Date().toISOString()
+    });
+    
+    // Record the transaction
+    addTransaction(currentUsername, `Redeemed Gift Code: ${code}`, giftCode.amount);
+    
+    // Update UI
+    status.textContent = `Successfully redeemed ${giftCode.amount} EC!`;
+    status.style.color = '#4CAF50';
+    document.getElementById('gift-code').value = '';
+    
+    // Update the active codes list for admin
+    updateActiveCodesList();
+  });
+}
+
+// Replace the buyItem function with the fixed version
+function buyItem(itemName, price) {
+  const purchasedRanks = loadPurchasedRanks();
+  
+  if (purchasedRanks[itemName]) {
+    // Already purchased - handle equip/unequip
+    const equippedRank = loadEquippedRank();
+    
+    if (equippedRank === itemName) {
+      // Unequip
+      saveEquippedRank(null);
+      
+      // Update button text
+      const itemElement = Array.from(document.querySelectorAll('.shop-item')).find(item => 
+        item.querySelector('h3').textContent === itemName
+      );
+      if (itemElement) {
+        const button = itemElement.querySelector('button');
+        button.textContent = 'EQUIP';
+      }
+      
+      alert(`${itemName} has been unequipped!`);
+    } else {
+      // Equip
+      saveEquippedRank(itemName);
+      
+      // Update all buttons to show equip
+      document.querySelectorAll('.shop-item').forEach(item => {
+        const button = item.querySelector('button');
+        const buttonRankName = item.querySelector('h3').textContent;
+        if (purchasedRanks[buttonRankName]) {
+          button.textContent = 'EQUIP';
+        }
+      });
+      
+      // Update this item's button to show unequip
+      const itemElement = Array.from(document.querySelectorAll('.shop-item')).find(item => 
+        item.querySelector('h3').textContent === itemName
+      );
+      if (itemElement) {
+        const button = itemElement.querySelector('button');
+        button.textContent = 'UNEQUIP';
+      }
+      
+      alert(`🎉 ${itemName} has been equipped! 🎉`);
+    }
+    return;
+  }
+
+  // Handle new purchase
+  if (balance >= price) {
+    if (confirm(`Are you sure you want to purchase ${itemName} for ${price} EC? This is a prestigious rank that shows your status in the Eager community!`)) {
+      updateBalance(balance - price);
+      addTransaction(currentUsername, itemName, price);
+      
+      // Save as purchased
+      purchasedRanks[itemName] = true;
+      savePurchasedRanks(purchasedRanks);
+      
+      // Auto-equip newly purchased rank
+      saveEquippedRank(itemName);
+      
+      // Update UI
+      const shopItems = document.querySelectorAll('.shop-item');
+      const itemElement = Array.from(shopItems).find(item => 
+        item.querySelector('h3').textContent === itemName
+      );
+      
+      if (itemElement) {
+        itemElement.classList.add('purchase-success');
+        const button = itemElement.querySelector('button');
+        button.textContent = 'UNEQUIP';
+      }
+      
+      // Update other purchased rank buttons
+      shopItems.forEach(item => {
+        const button = item.querySelector('button');
+        const buttonRankName = item.querySelector('h3').textContent;
+        if (purchasedRanks[buttonRankName] && buttonRankName !== itemName) {
+          button.textContent = 'EQUIP';
+        }
+      });
+      
+      const rankEmojis = {
+        'VIP Rank': '👑',
+        'MVP Rank': '🌟',
+        'Cheese Rank': '🧀',
+        'Eager Rank': '⚡',
+        'Chill Guy Rank': '😎'
+      };
+      
+      alert(`🎉 CONGRATULATIONS! 🎉\n\n${rankEmojis[itemName]} You are now a proud owner of ${itemName}! ${rankEmojis[itemName]}\n\nYour new rank has been automatically equipped!`);
+      
+      if (itemElement) {
+        setTimeout(() => {
+          itemElement.classList.remove('purchase-success');
+        }, 500);
+      }
+    }
+  } else {
+    alert('Not enough EC! Keep spinning the wheel or redeem more coins to unlock this prestigious rank!');
+  }
+}
+
+function checkUsername() {
+  const username = document.getElementById('username-input').value;
+  if (!username) return;
+
+  gun.get(`users/${username}`).once((data) => {
+    if (data) {
+      alert('Username already taken!');
+    } else {
+      gun.get(`users/${username}`).put({ username });
+      currentUsername = username;
+      localStorage.setItem('currentUsername', username);
+      const savedBalance = localStorage.getItem(`${username}_balance`);
+      if (savedBalance) {
+        updateBalance(parseInt(savedBalance));
+      } else {
+        updateBalance(100);
+      }
+      document.getElementById('welcome').classList.add('hidden');
+      document.getElementById('main-content').classList.remove('hidden');
+      document.getElementById('main-content').classList.add('slide-in');
+    }
+  });
+}
+
+function showWelcomeBack() {
+  if (currentUsername) {
+    const welcomeBack = document.createElement('div');
+    welcomeBack.className = 'welcome-back';
+    
+    // Add random stars
+    for (let i = 0; i < 20; i++) {
+      const star = document.createElement('span');
+      star.className = 'stars';
+      star.textContent = Math.random() > 0.5 ? '⭐' : '💖';
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.top = Math.random() * 100 + 'vh';
+      star.style.animationDelay = Math.random() * 2 + 's';
+      welcomeBack.appendChild(star);
+    }
+    
+    welcomeBack.innerHTML += `
+      <h1>Welcome Back ${currentUsername}! ⭐</h1>
+      <p>Welcome to the official Eager shop! Here you can spend your Eager Coins (EC) 
+         on various rewards and try your luck at the emoji spinner! 💖</p>
+    `;
+    
+    document.body.appendChild(welcomeBack);
+    
+    setTimeout(() => {
+      welcomeBack.remove();
+    }, 5000);
+  }
+}
+
+window.addEventListener('load', () => {
+  if (currentUsername) {
+    loadBattlePassProgress();
+    showWelcomeBack();
+    document.getElementById('welcome').classList.add('hidden');
+    document.getElementById('main-content').classList.remove('hidden');
+    document.getElementById('main-content').classList.add('slide-in');
+    
+    // Update rank buttons based on purchases
+    const purchasedRanks = loadPurchasedRanks();
+    const equippedRank = loadEquippedRank();
+    
+    document.querySelectorAll('.shop-item').forEach(item => {
+      const rankName = item.querySelector('h3').textContent;
+      const button = item.querySelector('button');
+      if (purchasedRanks[rankName]) {
+        button.textContent = rankName === equippedRank ? 'UNEQUIP' : 'EQUIP';
+      }
+    });
+    
+    // Check if admin and show transactions tab
+    if (currentUsername === 'EagerADMIN') {
+      document.getElementById('admin-transactions').style.display = 'flex';
+      updateTransactionsList();
+      updateActiveCodesList();
+    }
+  } else {
+    // Hide everything except welcome screen for new users
+    document.getElementById('main-content').classList.add('hidden');
+    document.getElementById('welcome').classList.remove('hidden');
+  }
+});
+
+document.querySelectorAll('.sidebar a').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const targetId = link.getAttribute('href').substring(1);
+    
+    ['home', 'wheel', 'shop', 'buy', 'transactions'].forEach(id => {
+      const section = document.getElementById(id);
+      if (section) {
+        section.style.display = 'none';
+      }
+    });
+    
+    const targetSection = document.getElementById(targetId);
+    if (targetSection) {
+      targetSection.style.display = 'block';
+      targetSection.scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+  });
+});
+
+function spin() {
+  const betAmount = parseInt(document.getElementById('bet-amount').value);
+  if (isNaN(betAmount) || betAmount <= 0) {
+    alert('Please enter a valid bet amount!');
+    return;
+  }
+  
+  if (betAmount > balance) {
+    alert('Not enough EC!');
+    return;
+  }
+
+  const spinButton = document.querySelector('.bet-container button');
+  spinButton.disabled = true;
+
+  const emojis = document.querySelectorAll('.emoji-box');
+  let currentIndex = 0;
+
+  document.getElementById('spinner-result').textContent = '';
+
+  const intervalId = setInterval(() => {
+    emojis.forEach(emoji => {
+      emoji.style.transform = 'scale(1)';
+      emoji.style.transition = 'transform 0.2s ease';
+    });
+    
+    emojis[currentIndex].style.transform = 'scale(1.2)';
+    currentIndex = (currentIndex + 1) % emojis.length;
+  }, 200);
+
+  setTimeout(() => {
+    clearInterval(intervalId);
+    const result = Math.random() < 0.5;
+    
+    if (result) {
+      updateBalance(balance + betAmount);
+      document.getElementById('spinner-result').textContent = '🎉 You won double! 🎉';
+      document.getElementById('spinner-result').style.color = '#4CAF50';
+    } else {
+      updateBalance(balance - betAmount);
+      document.getElementById('spinner-result').textContent = '❌ You lost everything! ❌';
+      document.getElementById('spinner-result').style.color = '#f44336';
+    }
+    
+    spinButton.disabled = false;
+  }, 3000);
+}
+
+function buyEC(amount, cost) {
+  if (confirm(`Are you sure you want to spend $${cost} for ${amount} EC?`)) {
+    updateBalance(balance + amount);
+    addTransaction(currentUsername, `${amount} EC Purchase`, cost);
+    alert(`Thank you for your purchase! ${amount} EC have been added to your balance.`);
+  }
+}
+</script>
+</body></html>
