@@ -714,6 +714,80 @@ body::-webkit-scrollbar-thumb:hover {
   margin: 5px 0;
   border-radius: 4px;
 }
+
+.crates-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  padding: 20px;
+}
+
+.crate {
+  background: linear-gradient(135deg, var(--navy-blue), #0d1525);
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  border: 2px solid var(--metallic-orange);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.crate:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(212, 128, 44, 0.3);
+}
+
+.crate .emoji {
+  font-size: 48px;
+  margin-bottom: 15px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.crate h3 {
+  color: var(--metallic-orange);
+  font-size: 24px;
+  margin: 10px 0;
+}
+
+.crate p {
+  color: var(--metallic-gray);
+  margin: 10px 0;
+}
+
+.crate .price {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+}
+
+.crate button {
+  padding: 15px 30px;
+  background: var(--metallic-orange);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+.crate button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px var(--metallic-orange);
+}
+
+@keyframes crateOpen {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.opening {
+  animation: crateOpen 0.5s ease;
+}
 </style>
 </head>
 <body>
@@ -721,6 +795,7 @@ body::-webkit-scrollbar-thumb:hover {
   <a href="#home"><i class="fas fa-home"></i> Home</a>
   <a href="#wheel"><i class="fas fa-dharmachakra"></i> Wheel</a>
   <a href="#shop"><i class="fas fa-store"></i> Shop</a>
+  <a href="#crates"><i class="fas fa-box"></i> Crates</a>
   <a href="#buy"><i class="fas fa-coins"></i> Buy</a>
   <a href="#transactions" id="admin-transactions" style="display: none;"><i class="fas fa-list"></i> Transactions</a>
 </div>
@@ -879,6 +954,51 @@ body::-webkit-scrollbar-thumb:hover {
           <p>When the still water is skibidi but you're just a chill guy</p>
           <p class="price">10000 EC</p>
           <button onclick="buyItem('Chill Guy Rank', 10000)" class="rank-button">Purchase</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="crates" style="display: none;">
+      <h1 class="section-title">EAGER CRATES</h1>
+      <div class="crates-container">
+        <div class="crate">
+          <div class="emoji">👑</div>
+          <h3>VIP Crate</h3>
+          <p>Win 10, 30, 100, or 400 EC!</p>
+          <p class="price">100 EC</p>
+          <button onclick="openCrate('vip')">Open Crate</button>
+        </div>
+        
+        <div class="crate">
+          <div class="emoji">🌟</div>
+          <h3>MVP Crate</h3>
+          <p>Win 50, 100, or 200 EC!</p>
+          <p class="price">100 EC</p>
+          <button onclick="openCrate('mvp')">Open Crate</button>
+        </div>
+        
+        <div class="crate">
+          <div class="emoji">🧀</div>
+          <h3>Cheese Crate</h3>
+          <p>Win 0 or 1000 EC!</p>
+          <p class="price">100 EC</p>
+          <button onclick="openCrate('cheese')">Open Crate</button>
+        </div>
+        
+        <div class="crate">
+          <div class="emoji">⚡</div>
+          <h3>Eager Crate</h3>
+          <p>Win 50-500 EC!</p>
+          <p class="price">100 EC</p>
+          <button onclick="openCrate('eager')">Open Crate</button>
+        </div>
+        
+        <div class="crate">
+          <div class="emoji">😎</div>
+          <h3>Chill Guy Crate</h3>
+          <p>Win 95, 100, or 1000 EC!</p>
+          <p class="price">100 EC</p>
+          <button onclick="openCrate('chillguy')">Open Crate</button>
         </div>
       </div>
     </div>
@@ -1245,108 +1365,72 @@ function redeemCode() {
   });
 }
 
-// Replace the buyItem function with the fixed version
-function buyItem(itemName, price) {
+// Updated openCrate function
+function openCrate(type) {
+  // First load purchased ranks
   const purchasedRanks = loadPurchasedRanks();
   
-  if (purchasedRanks[itemName]) {
-    // Already purchased - handle equip/unequip
-    const equippedRank = loadEquippedRank();
-    
-    if (equippedRank === itemName) {
-      // Unequip
-      saveEquippedRank(null);
-      
-      // Update button text
-      const itemElement = Array.from(document.querySelectorAll('.shop-item')).find(item => 
-        item.querySelector('h3').textContent === itemName
-      );
-      if (itemElement) {
-        const button = itemElement.querySelector('button');
-        button.textContent = 'EQUIP';
-      }
-      
-      alert(`${itemName} has been unequipped!`);
-    } else {
-      // Equip
-      saveEquippedRank(itemName);
-      
-      // Update all buttons to show equip
-      document.querySelectorAll('.shop-item').forEach(item => {
-        const button = item.querySelector('button');
-        const buttonRankName = item.querySelector('h3').textContent;
-        if (purchasedRanks[buttonRankName]) {
-          button.textContent = 'EQUIP';
-        }
-      });
-      
-      // Update this item's button to show unequip
-      const itemElement = Array.from(document.querySelectorAll('.shop-item')).find(item => 
-        item.querySelector('h3').textContent === itemName
-      );
-      if (itemElement) {
-        const button = itemElement.querySelector('button');
-        button.textContent = 'UNEQUIP';
-      }
-      
-      alert(`🎉 ${itemName} has been equipped! 🎉`);
-    }
+  // Check if user has the corresponding rank
+  const rankMap = {
+    'vip': 'VIP Rank',
+    'mvp': 'MVP Rank',
+    'cheese': 'Cheese Rank',
+    'eager': 'Eager Rank',
+    'chillguy': 'Chill Guy Rank'
+  };
+  
+  const requiredRank = rankMap[type];
+  
+  if (!purchasedRanks[requiredRank]) {
+    alert(`You need to purchase the ${requiredRank} to open this crate!`);
     return;
   }
 
-  // Handle new purchase
-  if (balance >= price) {
-    if (confirm(`Are you sure you want to purchase ${itemName} for ${price} EC? This is a prestigious rank that shows your status in the Eager community!`)) {
-      updateBalance(balance - price);
-      addTransaction(currentUsername, itemName, price);
-      
-      // Save as purchased
-      purchasedRanks[itemName] = true;
-      savePurchasedRanks(purchasedRanks);
-      
-      // Auto-equip newly purchased rank
-      saveEquippedRank(itemName);
-      
-      // Update UI
-      const shopItems = document.querySelectorAll('.shop-item');
-      const itemElement = Array.from(shopItems).find(item => 
-        item.querySelector('h3').textContent === itemName
-      );
-      
-      if (itemElement) {
-        itemElement.classList.add('purchase-success');
-        const button = itemElement.querySelector('button');
-        button.textContent = 'UNEQUIP';
-      }
-      
-      // Update other purchased rank buttons
-      shopItems.forEach(item => {
-        const button = item.querySelector('button');
-        const buttonRankName = item.querySelector('h3').textContent;
-        if (purchasedRanks[buttonRankName] && buttonRankName !== itemName) {
-          button.textContent = 'EQUIP';
-        }
-      });
-      
-      const rankEmojis = {
-        'VIP Rank': '👑',
-        'MVP Rank': '🌟',
-        'Cheese Rank': '🧀',
-        'Eager Rank': '⚡',
-        'Chill Guy Rank': '😎'
-      };
-      
-      alert(`🎉 CONGRATULATIONS! 🎉\n\n${rankEmojis[itemName]} You are now a proud owner of ${itemName}! ${rankEmojis[itemName]}\n\nYour new rank has been automatically equipped!`);
-      
-      if (itemElement) {
-        setTimeout(() => {
-          itemElement.classList.remove('purchase-success');
-        }, 500);
-      }
-    }
-  } else {
-    alert('Not enough EC! Keep spinning the wheel or redeem more coins to unlock this prestigious rank!');
+  if (balance < 100) {
+    alert('Not enough EC! You need 100 EC to open this crate.');
+    return;
   }
+
+  const crateElement = document.querySelector(`.crate:has(button[onclick*="${type}"])`);
+  crateElement.classList.add('opening');
+  
+  setTimeout(() => {
+    crateElement.classList.remove('opening');
+  }, 500);
+
+  updateBalance(balance - 100);
+  let reward = 0;
+
+  switch(type) {
+    case 'vip':
+      const vipRewards = [10, 30, 100, 400];
+      reward = vipRewards[Math.floor(Math.random() * vipRewards.length)];
+      break;
+    case 'mvp':
+      const mvpRewards = [50, 100, 200];
+      reward = mvpRewards[Math.floor(Math.random() * mvpRewards.length)];
+      break;
+    case 'cheese':
+      reward = Math.random() < 0.5 ? 0 : 1000;
+      break;
+    case 'eager':
+      reward = Math.floor(Math.random() * (500 - 50 + 1)) + 50;
+      break;
+    case 'chillguy':
+      const chillRewards = [95, 100, 1000];
+      reward = chillRewards[Math.floor(Math.random() * chillRewards.length)];
+      break;
+  }
+
+  updateBalance(balance + reward);
+  addTransaction(currentUsername, `Opened ${type.toUpperCase()} Crate`, 100);
+
+  // Create a special alert for the reward
+  const message = reward === 0 
+    ? '😢 Better luck next time!' 
+    : `🎉 CONGRATULATIONS! 🎉\n\nYou won ${reward} EC from the ${type.toUpperCase()} Crate!`;
+    
+  alert(message);
 }
 
 function checkUsername() {
@@ -1441,7 +1525,8 @@ document.querySelectorAll('.sidebar a').forEach(link => {
     e.preventDefault();
     const targetId = link.getAttribute('href').substring(1);
     
-    ['home', 'wheel', 'shop', 'buy', 'transactions'].forEach(id => {
+    // Update this line to include 'crates'
+    ['home', 'wheel', 'shop', 'crates', 'buy', 'transactions'].forEach(id => {
       const section = document.getElementById(id);
       if (section) {
         section.style.display = 'none';
@@ -1511,6 +1596,57 @@ function buyEC(amount, cost) {
     updateBalance(balance + amount);
     addTransaction(currentUsername, `${amount} EC Purchase`, cost);
     alert(`Thank you for your purchase! ${amount} EC have been added to your balance.`);
+  }
+}
+
+function buyItem(rankName, cost) {
+  const purchasedRanks = loadPurchasedRanks();
+  
+  // If already purchased, handle equip/unequip
+  if (purchasedRanks[rankName]) {
+    const equippedRank = loadEquippedRank();
+    if (equippedRank === rankName) {
+      // Unequip
+      saveEquippedRank(null);
+      const button = document.querySelector(`.shop-item:has(h3:contains("${rankName}")) button`);
+      if (button) button.textContent = 'EQUIP';
+    } else {
+      // Equip
+      saveEquippedRank(rankName);
+      // Update all buttons
+      document.querySelectorAll('.shop-item').forEach(item => {
+        const itemRankName = item.querySelector('h3').textContent;
+        const button = item.querySelector('button');
+        if (purchasedRanks[itemRankName]) {
+          button.textContent = itemRankName === rankName ? 'UNEQUIP' : 'EQUIP';
+        }
+      });
+    }
+    return;
+  }
+
+  // Handle new purchase
+  if (balance >= cost) {
+    if (confirm(`Are you sure you want to buy ${rankName} for ${cost} EC?`)) {
+      updateBalance(balance - cost);
+      
+      // Save the purchase
+      purchasedRanks[rankName] = true;
+      savePurchasedRanks(purchasedRanks);
+      
+      // Automatically equip the new rank
+      saveEquippedRank(rankName);
+      
+      // Update button text
+      const button = document.querySelector(`.shop-item:has(h3:contains("${rankName}")) button`);
+      if (button) button.textContent = 'UNEQUIP';
+      
+      addTransaction(currentUsername, rankName, cost);
+      
+      alert(`Successfully purchased ${rankName}!`);
+    }
+  } else {
+    alert('Not enough EC!');
   }
 }
 </script>
