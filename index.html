@@ -1,7 +1,9 @@
+
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<title>THE EAGER SHOP! SO COOL</title>
 <style>
 :root {
   --dark-green: #1a472a;
@@ -1515,7 +1517,9 @@ body::-webkit-scrollbar-thumb:hover {
 </div>
 
 <script>
-const gun = Gun();
+const gun = Gun({
+  peers: ['https://gun-manhattan.herokuapp.com/gun'] // Public relay peer
+});
 let currentUsername = localStorage.getItem('currentUsername') || '';
 let balance = 100;
 let battlePassProgress = 0;
@@ -2113,8 +2117,14 @@ function updateLeaderboard() {
   const leaderboardList = document.querySelector('.leaderboard-list');
   leaderboardList.innerHTML = '';
   
-  gun.get('eagerLeaderboard').map().once((data, id) => {
-    if (!data) return;
+  // Create a Set to track unique usernames
+  const uniqueUsernames = new Set();
+  
+  // Subscribe to real-time updates
+  gun.get('eagerLeaderboard').map().on((data, id) => {
+    if (!data || uniqueUsernames.has(data.username)) return;
+    
+    uniqueUsernames.add(data.username);
     
     const entry = document.createElement('div');
     entry.className = 'leaderboard-entry';
@@ -2136,30 +2146,34 @@ function addToLeaderboard() {
     return;
   }
   
-  // Check if already on leaderboard
+  let existingEntry = false;
+  
+  // First check if user already exists
   gun.get('eagerLeaderboard').map().once((data, id) => {
     if (data && data.username === currentUsername) {
+      existingEntry = true;
       // Update existing entry
       gun.get('eagerLeaderboard').get(id).put({
         username: currentUsername,
         balance: balance,
         lastUpdated: Date.now()
       });
-      updateLeaderboard();
       return;
     }
   });
   
-  // Add new entry
-  gun.get('eagerLeaderboard').set({
-    username: currentUsername,
-    balance: balance,
-    created: Date.now(),
-    lastUpdated: Date.now()
-  });
-  
-  updateLeaderboard();
-  alert('Successfully added to leaderboard!');
+  // Only add if not already on leaderboard
+  if (!existingEntry) {
+    gun.get('eagerLeaderboard').set({
+      username: currentUsername,
+      balance: balance,
+      created: Date.now(),
+      lastUpdated: Date.now()
+    });
+    alert('Successfully added to leaderboard!');
+  } else {
+    alert('Your balance has been updated on the leaderboard!');
+  }
 }
 
 // Add leaderboard to the sections array in the click handler
@@ -2179,7 +2193,12 @@ document.querySelectorAll('.sidebar a').forEach(link => {
     if (targetSection) {
       targetSection.style.display = 'block';
       if (targetId === 'leaderboard') {
-        updateLeaderboard();
+        // Clear and reload leaderboard when section is opened
+        const leaderboardList = document.querySelector('.leaderboard-list');
+        if (leaderboardList) {
+          leaderboardList.innerHTML = '';
+          updateLeaderboard();
+        }
       }
       targetSection.scrollIntoView({
         behavior: 'smooth'
