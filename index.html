@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-<title>THE EAGER SHOP! SO COOL</title>
+<title>VERY SIGMA SHOP</title>
 <style>
 :root {
   --dark-green: #1a472a;
@@ -2115,28 +2115,46 @@ if (currentUsername) {
 // Leaderboard functions
 function updateLeaderboard() {
   const leaderboardList = document.querySelector('.leaderboard-list');
-  leaderboardList.innerHTML = '';
+  if (!leaderboardList) return;
   
-  // Create a Set to track unique usernames
+  leaderboardList.innerHTML = '';
+  const entries = [];
   const uniqueUsernames = new Set();
   
-  // Subscribe to real-time updates
-  gun.get('eagerLeaderboard').map().on((data, id) => {
+  gun.get('eagerLeaderboard').map().once(function(data, id) {
     if (!data || uniqueUsernames.has(data.username)) return;
     
     uniqueUsernames.add(data.username);
+    entries.push({
+      username: data.username,
+      balance: data.balance
+    });
     
-    const entry = document.createElement('div');
-    entry.className = 'leaderboard-entry';
-    entry.innerHTML = `
-      <div class="leaderboard-rank">#${data.rank || '?'}</div>
-      <div class="leaderboard-info">
-        <div class="leaderboard-name">${data.username}</div>
-        <div class="leaderboard-balance">${data.balance} EC</div>
-      </div>
-    `;
+    // Sort entries by balance in descending order
+    entries.sort((a, b) => b.balance - a.balance);
     
-    leaderboardList.appendChild(entry);
+    // Clear and rebuild leaderboard with sorted entries
+    leaderboardList.innerHTML = '';
+    entries.forEach((entry, index) => {
+      const entryElement = document.createElement('div');
+      entryElement.className = 'leaderboard-entry';
+      
+      // Add special styling for top 3 places
+      let rankStyle = '';
+      if (index === 0) rankStyle = 'color: gold; font-weight: bold;';
+      else if (index === 1) rankStyle = 'color: silver; font-weight: bold;';
+      else if (index === 2) rankStyle = 'color: #cd7f32; font-weight: bold;';
+      
+      entryElement.innerHTML = `
+        <div class="leaderboard-rank" style="${rankStyle}">#${index + 1}</div>
+        <div class="leaderboard-info">
+          <div class="leaderboard-name">${entry.username}</div>
+          <div class="leaderboard-balance">${entry.balance} EC</div>
+        </div>
+      `;
+      
+      leaderboardList.appendChild(entryElement);
+    });
   });
 }
 
@@ -2148,11 +2166,9 @@ function addToLeaderboard() {
   
   let existingEntry = false;
   
-  // First check if user already exists
-  gun.get('eagerLeaderboard').map().once((data, id) => {
+  gun.get('eagerLeaderboard').map().once(function(data, id) {
     if (data && data.username === currentUsername) {
       existingEntry = true;
-      // Update existing entry
       gun.get('eagerLeaderboard').get(id).put({
         username: currentUsername,
         balance: balance,
@@ -2162,7 +2178,6 @@ function addToLeaderboard() {
     }
   });
   
-  // Only add if not already on leaderboard
   if (!existingEntry) {
     gun.get('eagerLeaderboard').set({
       username: currentUsername,
@@ -2206,5 +2221,10 @@ document.querySelectorAll('.sidebar a').forEach(link => {
     }
   });
 });
+
+// Load streak information on page load
+if (currentUsername) {
+  loadStreak();
+}
 </script>
 </body></html>
