@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-<title>VERY SIGMA SHOP</title>
+<title>EAGER SIGMA SHOP :)</title>
 <style>
 :root {
   --dark-green: #1a472a;
@@ -1530,6 +1530,77 @@ let transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
 
 // Gun DB for gift codes
 let giftCodesDB = gun.get('eagerGiftCodes'); // Changed from 'giftCodes' to make it globally shared
+
+function checkUsername() {
+  const usernameInput = document.getElementById('username-input');
+  const username = usernameInput.value.trim();
+  
+  if (username.length < 3) {
+    alert('Username must be at least 3 characters long!');
+    return;
+  }
+  
+  currentUsername = username;
+  localStorage.setItem('currentUsername', username);
+  
+  // Set initial balance if new user
+  if (!localStorage.getItem(`${username}_balance`)) {
+    localStorage.setItem(`${username}_balance`, '100');
+    balance = 100;
+  } else {
+    balance = parseInt(localStorage.getItem(`${username}_balance`));
+  }
+  
+  // Hide welcome screen, show main content
+  document.getElementById('welcome').classList.add('hidden');
+  document.getElementById('main-content').classList.remove('hidden');
+  
+  // Show welcome back animation
+  const welcomeBack = document.createElement('div');
+  welcomeBack.className = 'welcome-back';
+  welcomeBack.innerHTML = `
+    <h1>Welcome back, ${username}!</h1>
+    <p>Balance: ${balance} EC</p>
+  `;
+  document.body.appendChild(welcomeBack);
+  
+  // Create some stars
+  for (let i = 0; i < 20; i++) {
+    const star = document.createElement('div');
+    star.className = 'stars';
+    star.style.left = `${Math.random() * 100}%`;
+    star.style.top = `${Math.random() * 100}%`;
+    star.textContent = '⭐';
+    welcomeBack.appendChild(star);
+  }
+  
+  // Remove welcome back animation after it's done
+  setTimeout(() => {
+    welcomeBack.remove();
+  }, 5000);
+  
+  // Initialize other features
+  loadInventory();
+  loadEquippedPets();
+  loadStreak();
+}
+
+// Modify initial visibility setup
+window.addEventListener('DOMContentLoaded', () => {
+  if (currentUsername) {
+    document.getElementById('welcome').classList.add('hidden');
+    document.getElementById('main-content').classList.remove('hidden');
+  } else {
+    document.getElementById('welcome').classList.remove('hidden');
+    document.getElementById('main-content').classList.add('hidden');
+  }
+});
+
+// Add/update updateBalance function
+function updateBalance(newBalance) {
+  balance = newBalance;
+  localStorage.setItem(`${currentUsername}_balance`, balance.toString());
+}
 
 if(currentUsername) {
   const savedBalance = localStorage.getItem(`${currentUsername}_balance`);
