@@ -1097,6 +1097,79 @@ body::-webkit-scrollbar-thumb:hover {
   from { transform: scale(0); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
+
+.leaderboard-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.leaderboard-add-btn {
+  background: var(--metallic-orange);
+  border: none;
+  padding: 15px 30px;
+  border-radius: 8px;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 30px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.leaderboard-add-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(212, 128, 44, 0.3);
+}
+
+.leaderboard-entry {
+  background: linear-gradient(135deg, var(--navy-blue), #0d1525);
+  border: 2px solid var(--metallic-orange);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  animation: slideIn 0.5s ease-out;
+}
+
+.leaderboard-rank {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--metallic-orange);
+  min-width: 40px;
+  text-align: center;
+}
+
+.leaderboard-info {
+  flex-grow: 1;
+}
+
+.leaderboard-name {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 5px;
+}
+
+.leaderboard-balance {
+  font-size: 16px;
+  color: var(--metallic-gray);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 </style>
 </head>
 <body>
@@ -1110,6 +1183,7 @@ body::-webkit-scrollbar-thumb:hover {
   <a href="#blackjack"><i class="fas fa-cards"></i> Blackjack</a>
   <a href="#streak"><i class="fas fa-fire"></i> Daily Streak</a>
   <a href="#inventory"><i class="fas fa-box-open"></i> Inventory</a>
+  <a href="#leaderboard"><i class="fas fa-trophy"></i> Leaderboard</a>
 </div>
 
 <div class="content">
@@ -1425,6 +1499,16 @@ body::-webkit-scrollbar-thumb:hover {
           Claim Daily Reward
         </button>
         <div class="next-reward" id="next-reward"></div>
+      </div>
+    </div>
+
+    <div id="leaderboard" style="display: none;">
+      <h1 class="section-title">EAGER LEADERBOARD</h1>
+      <div class="leaderboard-container">
+        <button onclick="addToLeaderboard()" class="leaderboard-add-btn">
+          Add to Leaderboard
+        </button>
+        <div class="leaderboard-list"></div>
       </div>
     </div>
   </div>
@@ -2024,416 +2108,67 @@ if (currentUsername) {
   loadEquippedPets(); // Load equipped pets
 }
 
-// Other existing functions...
-
-function loadPurchasedRanks() {
-  const saved = localStorage.getItem(`${currentUsername}_ranks`);
-  return saved ? JSON.parse(saved) : {};
-}
-
-function savePurchasedRanks(ranks) {
-  localStorage.setItem(`${currentUsername}_ranks`, JSON.stringify(ranks));
-}
-
-function loadEquippedRank() {
-  return localStorage.getItem(`${currentUsername}_equipped_rank`);
-}
-
-function saveEquippedRank(rank) {
-  localStorage.setItem(`${currentUsername}_equipped_rank`, rank);
-}
-
-function updateBalance(newBalance) {
-  balance = newBalance;
-  localStorage.setItem(`${currentUsername}_balance`, balance);
+// Leaderboard functions
+function updateLeaderboard() {
+  const leaderboardList = document.querySelector('.leaderboard-list');
+  leaderboardList.innerHTML = '';
   
-  const balanceDisplay = document.createElement('div');
-  balanceDisplay.style.position = 'fixed';
-  balanceDisplay.style.top = '20px';
-  balanceDisplay.style.right = '20px';
-  balanceDisplay.style.background = 'var(--metallic-orange)';
-  balanceDisplay.style.padding = '10px 20px';
-  balanceDisplay.style.borderRadius = '8px';
-  balanceDisplay.style.fontWeight = 'bold';
-  balanceDisplay.style.zIndex = '1000';
-  balanceDisplay.textContent = `Balance: ${balance} EC`;
-  
-  const existingBalance = document.querySelector('.balance-display');
-  if (existingBalance) {
-    existingBalance.remove();
-  }
-  
-  balanceDisplay.classList.add('balance-display');
-  document.body.appendChild(balanceDisplay);
-}
-
-function unlockBattlePassItem(level) {
-  const prices = [20, 25, 30, 35, 40, 45, 50];
-  const items = ["High Five", "Fist Bump", "Hand Shake", "Pat on the Back", 
-                "Round of Applause", "The Book Eager Chapter 1", "Mystery Chest"];
-  
-  if (level !== battlePassProgress) {
-    alert("Complete previous items first!");
-    return;
-  }
-  
-  const price = prices[level];
-  
-  if (balance >= price) {
-    if (confirm(`Unlock ${items[level]} for ${price} EC?`)) {
-      updateBalance(balance - price);
-      battlePassProgress++;
-      saveBattlePassProgress();
-      
-      if (level === 6) {
-        const rewards = [0, 20, 40, 50, 100, 250];
-        const reward = rewards[Math.floor(Math.random() * rewards.length)];
-        updateBalance(balance + reward);
-        alert(`You got ${reward} EC from the Mystery Chest!`);
-      }
-      
-      document.querySelectorAll('.battle-pass-item').forEach((item, index) => {
-        if (index < battlePassProgress) {
-          item.classList.add('completed');
-          item.classList.remove('locked');
-        } else if (index === battlePassProgress) {
-          item.classList.remove('locked');
-        } else {
-          item.classList.add('locked');
-        }
-      });
-      
-      alert(`Successfully unlocked ${items[level]}!`);
-    }
-  } else {
-    alert('Not enough EC!');
-  }
-}
-
-// Save battle pass progress
-function saveBattlePassProgress() {
-  localStorage.setItem(`${currentUsername}_battlepass`, battlePassProgress);
-}
-
-// Load battle pass progress
-function loadBattlePassProgress() {
-  const saved = localStorage.getItem(`${currentUsername}_battlepass`);
-  if (saved) {
-    battlePassProgress = parseInt(saved);
-    requestAnimationFrame(() => {
-      const items = document.querySelectorAll('.battle-pass-item');
-      if (items) {
-        items.forEach((item, index) => {
-          if (index < battlePassProgress) {
-            item.classList.add('completed');
-            item.classList.remove('locked');
-          } else if (index === battlePassProgress) {
-            item.classList.remove('locked');
-          } else {
-            item.classList.add('locked');
-          }
-        });
-      }
-    });
-  }
-}
-
-// Function to gift EC to users
-function giftEC() {
-  // Empty function to avoid errors
-}
-
-function generateGiftCode() {
-  if (currentUsername !== 'EagerADMIN') return;
-  
-  const amount = parseInt(document.getElementById('code-amount').value);
-  if (!amount || amount <= 0) {
-    alert('Please enter a valid EC amount');
-    return;
-  }
-
-  const code = Math.random().toString(36).substring(2, 10).toUpperCase();
-  
-  giftCodesDB.get(code).put({
-    amount: amount,
-    active: true,
-    created: new Date().toISOString(),
-    createdBy: 'EagerADMIN'
-  }, (ack) => {
-    if (ack.err) {
-      alert('Error generating code. Please try again.');
-      return;
-    }
+  gun.get('eagerLeaderboard').map().once((data, id) => {
+    if (!data) return;
     
-    document.getElementById('generated-code').textContent = `Generated Code: ${code}`;
-    document.getElementById('generated-code').style.color = '#4CAF50';
-    document.getElementById('code-amount').value = '';
-
-    updateActiveCodesList();
-  });
-}
-
-function updateActiveCodesList() {
-  const list = document.getElementById('active-codes-list');
-  if (!list || currentUsername !== 'EagerADMIN') return;
-  
-  list.innerHTML = '';
-  
-  giftCodesDB.map().once((data, code) => {
-    if (data && data.active) {
-      const codeItem = document.createElement('div');
-      codeItem.className = 'code-item';
-      codeItem.innerHTML = `
-        <span>${code} (${data.amount} EC)</span>
-        <button onclick="deleteCode('${code}')">Delete</button>
-      `;
-      list.appendChild(codeItem);
-    }
-  });
-}
-
-function deleteCode(code) {
-  if (currentUsername !== 'EagerADMIN') return;
-  
-  giftCodesDB.get(code).put({
-    active: false,
-    deletedAt: new Date().toISOString(),
-    deletedBy: 'EagerADMIN'
-  });
-  
-  updateActiveCodesList();
-}
-
-function redeemCode() {
-  const code = document.getElementById('gift-code').value.toUpperCase();
-  const status = document.getElementById('redeem-status');
-  
-  if (!code) {
-    status.textContent = 'Please enter a code';
-    return;
-  }
-
-  if (code === 'SKIBIDEAGER') {
-    const specialCodeKey = `${currentUsername}_SKIBIDEAGER`;
-    if (localStorage.getItem(specialCodeKey)) {
-      status.textContent = 'You have already redeemed this code!';
-      status.style.color = '#f44336';
-      return;
-    }
-    
-    const skibidiPet = {
-      name: 'Skibidi',
-      image: 'https://upload.wikimedia.org/wikipedia/en/0/09/Skibidi_toilet_screenshot.webp',
-      rarity: 'exclusive',
-      cashback: 10,
-      luck: 10
-    };
-    
-    inventory.push(skibidiPet);
-    saveInventory();
-    updateInventoryUI();
-    
-    localStorage.setItem(specialCodeKey, 'true');
-    status.textContent = '🎉 Exclusive Skibidi pet added to your inventory! 🎉';
-    status.style.color = '#9932CC';
-    document.getElementById('gift-code').value = '';
-    return;
-  }
-  
-  if (code === 'SIGMAEAGER69') {
-    const specialCodeKey = `${currentUsername}_SIGMAEAGER69`;
-    if (localStorage.getItem(specialCodeKey)) {
-      status.textContent = 'You have already redeemed this code!';
-      status.style.color = '#f44336';
-      return;
-    }
-    
-    updateBalance(balance + 10000);
-    status.textContent = '🎉 SECRET CODE: You received 10,000 EC! Welcome to the elite! 🎉';
-    status.style.color = '#4CAF50';
-    document.getElementById('gift-code').value = '';
-    return;
-  }
-  
-  const userRedemptionKey = `${currentUsername}_${code}`;
-  if (localStorage.getItem(userRedemptionKey)) {
-    status.textContent = 'You have already redeemed this code!';
-    status.style.color = '#f44336';
-    return;
-  }
-  
-  giftCodesDB.get(code).once((giftCode) => {
-    if (!giftCode || !giftCode.active) {
-      status.textContent = 'Invalid or expired code';
-      status.style.color = '#f44336';
-      return;
-    }
-    
-    updateBalance(balance + giftCode.amount);
-    
-    localStorage.setItem(userRedemptionKey, 'true');
-    
-    status.textContent = `Successfully redeemed ${giftCode.amount} EC!`;
-    status.style.color = '#4CAF50';
-    document.getElementById('gift-code').value = '';
-  });
-}
-
-// Updated openCrate function
-function openCrate(type) {
-  const purchasedRanks = loadPurchasedRanks();
-  
-  const rankMap = {
-    'vip': 'VIP Rank',
-    'mvp': 'MVP Rank',
-    'cheese': 'Cheese Rank',
-    'eager': 'Eager Rank',
-    'chillguy': 'Chill Guy Rank'
-  };
-  
-  const requiredRank = rankMap[type];
-  
-  if (!purchasedRanks[requiredRank]) {
-    alert(`You need to purchase the ${requiredRank} to open this crate!`);
-    return;
-  }
-
-  if (balance < 100) {
-    alert('Not enough EC! You need 100 EC to open this crate.');
-    return;
-  }
-
-  const crateElement = Array.from(document.querySelectorAll('.crate')).find(crate => 
-    crate.querySelector('button').onclick.toString().includes(type)
-  );
-  crateElement.classList.add('opening');
-  
-  setTimeout(() => {
-    crateElement.classList.remove('opening');
-  }, 500);
-  
-  updateBalance(balance - 100);
-  let reward = 0;
-
-  switch(type) {
-    case 'vip':
-      const vipRewards = [10, 30, 100, 400];
-      reward = vipRewards[Math.floor(Math.random() * vipRewards.length)];
-      break;
-    case 'mvp':
-      const mvpRewards = [50, 100, 200];
-      reward = mvpRewards[Math.floor(Math.random() * mvpRewards.length)];
-      break;
-    case 'cheese':
-      reward = Math.random() < 0.5 ? 0 : 1000;
-      break;
-    case 'eager':
-      reward = Math.floor(Math.random() * (500 - 50 + 1)) + 50;
-      break;
-    case 'chillguy':
-      const chillRewards = [95, 100, 1000];
-      reward = chillRewards[Math.floor(Math.random() * chillRewards.length)];
-      break;
-  }
-
-  updateBalance(balance + reward);
-  
-  const message = reward === 0 
-    ? '😢 Better luck next time!' 
-    : `🎉 CONGRATULATIONS! 🎉\n\nYou won ${reward} EC from the ${type.toUpperCase()} Crate!`;
-    
-  alert(message);
-}
-
-function checkUsername() {
-  const username = document.getElementById('username-input').value;
-  if (!username) return;
-
-  gun.get(`users/${username}`).once((data) => {
-    if (data) {
-      alert('Username already taken!');
-    } else {
-      gun.get(`users/${username}`).put({ username });
-      currentUsername = username;
-      localStorage.setItem('currentUsername', username);
-      const savedBalance = localStorage.getItem(`${username}_balance`);
-      if (savedBalance) {
-        updateBalance(parseInt(savedBalance));
-      } else {
-        updateBalance(100);
-      }
-      document.getElementById('welcome').classList.add('hidden');
-      document.getElementById('main-content').classList.remove('hidden');
-      document.getElementById('main-content').classList.add('slide-in');
-    }
-  });
-}
-
-function showWelcomeBack() {
-  if (currentUsername) {
-    const welcomeBack = document.createElement('div');
-    welcomeBack.className = 'welcome-back';
-    
-    for (let i = 0; i < 20; i++) {
-      const star = document.createElement('span');
-      star.className = 'stars';
-      star.textContent = Math.random() > 0.5 ? '⭐' : '💖';
-      star.style.left = Math.random() * 100 + 'vw';
-      star.style.top = Math.random() * 100 + 'vh';
-      star.style.animationDelay = Math.random() * 2 + 's';
-      welcomeBack.appendChild(star);
-    }
-    
-    welcomeBack.innerHTML += `
-      <h1>Welcome Back ${currentUsername}! ⭐</h1>
-      <p>Welcome to the official Eager shop! Here you can spend your Eager Coins (EC) 
-         on various rewards and try your luck at the emoji spinner! 💖</p>
+    const entry = document.createElement('div');
+    entry.className = 'leaderboard-entry';
+    entry.innerHTML = `
+      <div class="leaderboard-rank">#${data.rank || '?'}</div>
+      <div class="leaderboard-info">
+        <div class="leaderboard-name">${data.username}</div>
+        <div class="leaderboard-balance">${data.balance} EC</div>
+      </div>
     `;
     
-    document.body.appendChild(welcomeBack);
-    
-    setTimeout(() => {
-      welcomeBack.remove();
-    }, 5000);
-  }
+    leaderboardList.appendChild(entry);
+  });
 }
 
-window.addEventListener('load', () => {
-  if (currentUsername) {
-    setTimeout(() => {
-      loadBattlePassProgress();
-      loadStreak();
-      loadInventory();
-      loadEquippedPets();
-    }, 100);
-    
-    showWelcomeBack();
-    document.getElementById('welcome').classList.add('hidden');
-    document.getElementById('main-content').classList.remove('hidden');
-    document.getElementById('main-content').classList.add('slide-in');
-    
-    const purchasedRanks = loadPurchasedRanks();
-    const equippedRank = loadEquippedRank();
-    
-    document.querySelectorAll('.shop-item').forEach(item => {
-      const rankName = item.querySelector('h3').textContent;
-      const button = item.querySelector('button');
-      if (purchasedRanks[rankName]) {
-        button.textContent = rankName === equippedRank ? 'UNEQUIP' : 'EQUIP';
-      }
-    });
-  } else {
-    document.getElementById('main-content').classList.add('hidden');
-    document.getElementById('welcome').classList.remove('hidden');
+function addToLeaderboard() {
+  if (!currentUsername) {
+    alert('Please log in first!');
+    return;
   }
-});
+  
+  // Check if already on leaderboard
+  gun.get('eagerLeaderboard').map().once((data, id) => {
+    if (data && data.username === currentUsername) {
+      // Update existing entry
+      gun.get('eagerLeaderboard').get(id).put({
+        username: currentUsername,
+        balance: balance,
+        lastUpdated: Date.now()
+      });
+      updateLeaderboard();
+      return;
+    }
+  });
+  
+  // Add new entry
+  gun.get('eagerLeaderboard').set({
+    username: currentUsername,
+    balance: balance,
+    created: Date.now(),
+    lastUpdated: Date.now()
+  });
+  
+  updateLeaderboard();
+  alert('Successfully added to leaderboard!');
+}
 
+// Add leaderboard to the sections array in the click handler
 document.querySelectorAll('.sidebar a').forEach(link => {
   link.addEventListener('click', (e) => {
     e.preventDefault();
     const targetId = link.getAttribute('href').substring(1);
     
-    ['home', 'wheel', 'shop', 'crates', 'buy', 'slots', 'blackjack', 'streak', 'inventory'].forEach(id => {
+    ['home', 'wheel', 'shop', 'crates', 'buy', 'slots', 'blackjack', 'streak', 'inventory', 'leaderboard'].forEach(id => {
       const section = document.getElementById(id);
       if (section) {
         section.style.display = 'none';
@@ -2443,180 +2178,14 @@ document.querySelectorAll('.sidebar a').forEach(link => {
     const targetSection = document.getElementById(targetId);
     if (targetSection) {
       targetSection.style.display = 'block';
+      if (targetId === 'leaderboard') {
+        updateLeaderboard();
+      }
       targetSection.scrollIntoView({
         behavior: 'smooth'
       });
     }
   });
 });
-
-// New function to buy and hatch an egg
-function buyAndHatchEgg(type = 'farm') {
-  let cost = 5000; // Default farm egg cost
-  let pets = [];
-  
-  if (type === 'eager') {
-    cost = 10000;
-    pets = [
-      {name: 'Eager', image: 'https://eagershop.vercel.app/!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!EAGER.png', rarity: 'rare'},
-      {name: 'Beager', image: 'https://eagershop.vercel.app/BeeEager.png', rarity: 'super-rare'},
-      {name: 'Gentleman Eager', image: 'https://eagershop.vercel.app/EagerButCute.png', rarity: 'epic'},
-      {name: 'Black Eager', image: 'https://eagershop.vercel.app/Eagerbutblack.png', rarity: 'mythic'},
-      {name: 'Mexican Eager', image: 'https://eagershop.vercel.app/MEXICANEAGER.png', rarity: 'legendary'},
-      {name: 'Anime Girl Eager', image: 'https://eagershop.vercel.app/Anime%20Girl%20Eager.png', rarity: 'legendary'}
-    ];
-  } else if (type === 'brawl') {
-    cost = 15000;
-    pets = [
-      {name: 'Tick', image: 'https://static.wikia.nocookie.net/brawlstars/images/5/59/Mega_Box.png/revision/latest?cb=20200521231853', rarity: 'super-rare'},
-      {name: 'Mico', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSShErFJMxwiBGA7qGl-THWC0CpaY-DYiq65w&s', rarity: 'mythic'}
-    ];
-  } else {
-    // Farm egg pets
-    pets = [
-      {name: 'Pig', image: 'https://static.wikia.nocookie.net/minecraft/images/1/11/PigNew.png', rarity: 'common'},
-      {name: 'Cow', image: 'https://static.wikia.nocookie.net/minecraft/images/f/f3/CowNew.png', rarity: 'rare'},
-      {name: 'Chicken', image: 'https://static.wikia.nocookie.net/minecraft/images/9/95/ChickenNew.png', rarity: 'super-rare'}
-    ];
-  }
-
-  if (balance < cost) {
-    alert('Not enough EC!');
-    return;
-  }
-
-  updateBalance(balance - cost);
-
-  // Create hatching animation container
-  const hatchingContainer = document.createElement('div');
-  hatchingContainer.style.cssText = `
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-    text-align: center;
-    background: rgba(0,0,0,0.8);
-    padding: 40px;
-    border-radius: 20px;
-    animation: scaleIn 0.5s ease-out;
-  `;
-
-  // Get egg image based on type
-  let eggImage;
-  if (type === 'eager') {
-    eggImage = 'https://m.media-amazon.com/images/I/51F02iatPKL._AC_UF1000,1000_QL80_.jpg';
-  } else if (type === 'brawl') {
-    eggImage = 'https://static.wikia.nocookie.net/brawlstars/images/5/59/Mega_Box.png/revision/latest?cb=20200521231853';
-  } else {
-    eggImage = 'https://freepngimg.com/thumb/egg/3-2-egg-png-picture.png';
-  }
-
-  // Add egg image that will shake
-  const egg = document.createElement('img');
-  egg.src = eggImage;
-  egg.style.cssText = `
-    width: 150px;
-    height: 150px;
-    object-fit: contain;
-    animation: shake 0.5s infinite;
-  `;
-
-  hatchingContainer.appendChild(egg);
-  document.body.appendChild(hatchingContainer);
-
-  // After 2 seconds, reveal the pet
-  setTimeout(() => {
-    // Apply luck bonus from equipped pets if any
-    const perks = calculateEquippedPerks();
-    const luckBonus = perks.luck / 100;
-
-    // Weight the probabilities based on rarity and luck bonus
-    const weights = {
-      'common': 0.5 - (luckBonus * 0.1),
-      'rare': 0.3 - (luckBonus * 0.1),
-      'super-rare': 0.15 + (luckBonus * 0.1),
-      'epic': 0.03 + (luckBonus * 0.03),
-      'mythic': 0.015 + (luckBonus * 0.04),
-      'legendary': 0.005 + (luckBonus * 0.05)
-    };
-
-    // Filter pets by their probabilities
-    let availablePets = pets.filter(pet => {
-      const rand = Math.random();
-      const weight = weights[pet.rarity.toLowerCase()] || 0;
-      return rand < weight;
-    });
-
-    // If no pet was selected, pick a random one from the lowest rarity
-    if (availablePets.length === 0) {
-      availablePets = [pets[0]];
-    }
-
-    // Pick random pet from available ones
-    const pet = availablePets[Math.floor(Math.random() * availablePets.length)];
-
-    // Update egg to show hatched pet
-    egg.src = pet.image;
-    egg.style.animation = 'scaleIn 0.5s ease-out';
-
-    // Add rarity text
-    const rarityText = document.createElement('div');
-    rarityText.textContent = pet.name;
-    rarityText.style.cssText = `
-      margin-top: 20px;
-      font-size: 24px;
-      color: white;
-      font-weight: bold;
-    `;
-    
-    // Add rarity class for color
-    const rarityClass = document.createElement('div');
-    rarityClass.textContent = pet.rarity.toUpperCase();
-    rarityClass.style.cssText = `
-      margin-top: 10px;
-      font-size: 18px;
-      font-weight: bold;
-    `;
-    
-    // Set color based on rarity
-    switch(pet.rarity.toLowerCase()) {
-      case 'common':
-        rarityClass.style.color = 'white';
-        break;
-      case 'rare':
-        rarityClass.style.color = '#00ff00';
-        break;
-      case 'super-rare':
-        rarityClass.style.color = '#00ffff';
-        break;
-      case 'epic':
-        rarityClass.style.color = '#ff00ff';
-        break;
-      case 'mythic':
-        rarityClass.style.color = '#ff0000';
-        break;
-      case 'legendary':
-        rarityClass.style.color = '#ffff00';
-        break;
-      case 'exclusive':
-        rarityClass.style.color = '#9932CC';
-        break;
-    }
-
-    hatchingContainer.appendChild(rarityText);
-    hatchingContainer.appendChild(rarityClass);
-
-    // Add pet to inventory
-    inventory.push(pet);
-    saveInventory();
-    updateInventoryUI();
-
-    // Remove hatching container after 3 more seconds
-    setTimeout(() => {
-      hatchingContainer.remove();
-    }, 3000);
-  }, 2000);
-}
 </script>
 </body></html>
