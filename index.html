@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-<title>EAGER SIGMA SHOP :)</title>
+<title>EAGERSHOP SIGMA</title>
 <style>
 :root {
   --dark-green: #1a472a;
@@ -1531,6 +1531,84 @@ let transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
 // Gun DB for gift codes
 let giftCodesDB = gun.get('eagerGiftCodes'); // Changed from 'giftCodes' to make it globally shared
 
+function redeemCode() {
+  const codeInput = document.getElementById('gift-code');
+  const code = codeInput.value.trim();
+  const statusElement = document.getElementById('redeem-status');
+  
+  if (!code) {
+    statusElement.textContent = 'Please enter a code';
+    statusElement.style.color = '#f44336';
+    return;
+  }
+
+  // Check the code in Gun database
+  giftCodesDB.get(code).once((data) => {
+    if (!data || data.used) {
+      statusElement.textContent = 'Invalid or already used code';
+      statusElement.style.color = '#f44336';
+      return;
+    }
+
+    // Mark code as used
+    giftCodesDB.get(code).put({
+      used: true,
+      usedBy: currentUsername,
+      usedAt: Date.now()
+    });
+
+    // Award the gift
+    const reward = data.amount || 100; // Default to 100 EC if amount not specified
+    updateBalance(balance + reward);
+    
+    statusElement.textContent = `Success! Received ${reward} EC`;
+    statusElement.style.color = '#4CAF50';
+    codeInput.value = '';
+
+    // Add to transactions
+    transactions.push({
+      type: 'gift_code',
+      code: code,
+      amount: reward,
+      timestamp: Date.now()
+    });
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+  });
+}
+
+// Function to handle EC purchases
+function buyEC(amount, cost) {
+  if (confirm(`Are you sure you want to buy ${amount} EC for $${cost}?`)) {
+    // Here we'd normally integrate with a payment processor
+    // For now, we'll just simulate the purchase
+    updateBalance(balance + amount);
+    
+    // Add to transactions
+    transactions.push({
+      type: 'purchase',
+      amount: amount,
+      cost: cost,
+      timestamp: Date.now()
+    });
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+    
+    alert(`Successfully purchased ${amount} EC!`);
+  }
+}
+
+// Add this function to create new gift codes (admin only)
+function createGiftCode(code, amount) {
+  giftCodesDB.get(code).put({
+    code: code,
+    amount: amount,
+    created: Date.now(),
+    used: false
+  });
+}
+
+// Example gift code creation (you would normally do this through an admin panel)
+// createGiftCode('WELCOME2024', 1000);
+
 function checkUsername() {
   const usernameInput = document.getElementById('username-input');
   const username = usernameInput.value.trim();
@@ -1887,7 +1965,63 @@ function spinSlots() {
 }
 
 function buyEC(amount, cost) {
-  window.location.href = 'https://www.barnesandnoble.com/w/eager-helen-fox/1100618567?ean=9780553487954';
+  if (confirm(`Are you sure you want to buy ${amount} EC for $${cost}?`)) {
+    // Here we'd normally integrate with a payment processor
+    // For now, we'll just simulate the purchase
+    updateBalance(balance + amount);
+    
+    // Add to transactions
+    transactions.push({
+      type: 'purchase',
+      amount: amount,
+      cost: cost,
+      timestamp: Date.now()
+    });
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+    
+    alert(`Successfully purchased ${amount} EC!`);
+  }
+}
+
+function buyAndHatchEgg(type = 'farm') {
+  let cost = type === 'farm' ? 5000 : type === 'eager' ? 10000 : 15000;
+  let pets = [];
+  
+  if (balance < cost) {
+    alert('Not enough EC!');
+    return;
+  }
+
+  if (type === 'farm') {
+    pets = [
+      {name: 'Pig', image: '🐷', rarity: 'common'},
+      {name: 'Cow', image: '🐮', rarity: 'uncommon'},
+      {name: 'Chicken', image: '🐔', rarity: 'rare'}
+    ];
+  } else if (type === 'eager') {
+    pets = [
+      {name: 'Eager', image: '😊', rarity: 'rare'},
+      {name: 'Beager', image: '🐝', rarity: 'epic'},
+      {name: 'Gentleman Eager', image: '🎩', rarity: 'legendary'},
+      {name: 'Black Eager', image: '🖤', rarity: 'mythic'},
+      {name: 'Mexican Eager', image: '🌮', rarity: 'mythic'},
+      {name: 'Anime Girl Eager', image: '👧', rarity: 'legendary'}
+    ];
+  } else if (type === 'brawl') {
+    pets = [
+      {name: 'Tick', image: '🤖', rarity: 'super rare', cashback: 15, luck: 4},
+      {name: 'Mico', image: '🐒', rarity: 'mythic', cashback: 15, luck: 6}
+    ];
+  }
+
+  updateBalance(balance - cost);
+  
+  const randomPet = pets[Math.floor(Math.random() * pets.length)];
+  inventory.push(randomPet);
+  saveInventory();
+  
+  alert(`🎉 You hatched a ${randomPet.rarity} ${randomPet.name}!`);
+  updateInventoryUI();
 }
 
 function buyItem(rankName, cost) {
@@ -1932,6 +2066,23 @@ function buyItem(rankName, cost) {
   } else {
     alert('Not enough EC!');
   }
+}
+
+// Load purchased ranks
+function loadPurchasedRanks() {
+  return JSON.parse(localStorage.getItem(`${currentUsername}_purchasedRanks`) || '{}');
+}
+
+function savePurchasedRanks(ranks) {
+  localStorage.setItem(`${currentUsername}_purchasedRanks`, JSON.stringify(ranks));
+}
+
+function loadEquippedRank() {
+  return localStorage.getItem(`${currentUsername}_equippedRank`);
+}
+
+function saveEquippedRank(rank) {
+  localStorage.setItem(`${currentUsername}_equippedRank`, rank);
 }
 
 // Blackjack functions
