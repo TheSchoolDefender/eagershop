@@ -1,9 +1,8 @@
-
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-<title>EAGERSHOP SIGMA</title>
+<title>MOST PEAK WEBSITE EVER</title>
 <style>
 :root {
   --dark-green: #1a472a;
@@ -288,10 +287,9 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .buy-option img {
-  width: 80px; /* Set fixed width */
-  height: 80px; /* Set fixed height */
-  object-fit: contain; /* Maintain aspect ratio */
-  margin: 15px 0; /* Add some vertical spacing */
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
 }
 
 .buy-option span {
@@ -408,14 +406,16 @@ body::-webkit-scrollbar-thumb:hover {
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
   transition: all 0.3s ease;
   border: 2px solid var(--metallic-gray);
-  min-height: 250px; /* Ensure consistent height */
-  justify-content: center; /* Center content vertically */
+}
+
+.shop-item:hover {
+  transform: translateY(-5px);
+  border-color: var(--metallic-orange);
 }
 
 .shop-item .emoji {
   font-size: 48px;
-  margin: 15px 0;
-  animation: float 3s ease-in-out infinite;
+  margin-bottom: 10px;
 }
 
 .shop-item .price {
@@ -878,6 +878,7 @@ body::-webkit-scrollbar-thumb:hover {
   border: 2px solid var(--metallic-orange);
   transition: all 0.3s ease;
   position: relative;
+  overflow: hidden;
 }
 
 .crate:hover {
@@ -1030,147 +1031,123 @@ body::-webkit-scrollbar-thumb:hover {
 
 .inventory-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Slightly reduced size */
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Adjusted minimum width */
   gap: 20px;
-  padding: 25px;
+  padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* Enhanced inventory slot styling */
 .inventory-slot {
-  background: linear-gradient(135deg, var(--navy-blue), #0d1525);
-  border: 2px solid var(--metallic-gray);
-  border-radius: 15px;
-  padding: 15px; /* Reduced padding */
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center; /* Center align content */
-  justify-content: center; /* Center align content */
-  gap: 10px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-}
-
-.pet-container {
-  width: 100%;
-  height: 100%;
+  background: linear-gradient(135deg, var(--navy-blue), #0d1525);
+  border: 2px solid var(--metal-gray);
+  border-radius: 15px;
+  padding: 15px;
+  width: 150px; /* Fixed width */
+  height: 150px; /* Fixed height */
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Changed from padding to center content */
-  padding: 15px; /* Reduced padding */
-  border-radius: 12px;
+  justify-content: space-between;
+  gap: 10px;
   transition: all 0.3s ease;
-  position: relative;
-  background: rgba(0,0,0,0.2);
+  cursor: pointer;
+  overflow: hidden; /* Prevent content overflow */
 }
 
-.pet-container img {
-  width: 80px; /* Set fixed width */
-  height: 80px; /* Set fixed height */
-  object-fit: contain;
-  margin: 15px 0; /* Adjusted margin */
+.inventory-slot img {
+  width: 80px; /* Control image size */
+  height: 80px; /* Control image size */
+  object-fit: contain; /* Maintain aspect ratio */
+  margin: 5px 0;
 }
 
-.pet-container.equipped {
-  border: 3px solid #4CAF50;
-  box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
-  animation: equipGlow 1.5s infinite alternate;
+.inventory-slot.equipped {
+  border: 3px solid var(--metallic-orange);
+  box-shadow: 0 0 15px var(--metallic-orange);
+  animation: equipGlow 2s infinite alternate;
 }
 
 @keyframes equipGlow {
-  from { box-shadow: 0 0 10px rgba(76, 175, 80, 0.5); }
-  to { box-shadow: 0 0 20px rgba(76, 175, 80, 0.8); }
-}
-
-@keyframes shake {
-  0% { transform: rotate(0deg); }
-  25% { transform: rotate(5deg); }
-  50% { transform: rotate(0deg); }
-  75% { transform: rotate(-5deg); }
-  100% { transform: rotate(0deg); }
-}
-
-@keyframes scaleIn {
-  from { transform: scale(0); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-.leaderboard-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.leaderboard-add-btn {
-  background: var(--metallic-orange);
-  border: none;
-  padding: 15px 30px;
-  border-radius: 8px;
-  color: white;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-bottom: 30px;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.leaderboard-add-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(212, 128, 44, 0.3);
-}
-
-.leaderboard-entry {
-  background: linear-gradient(135deg, var(--navy-blue), #0d1525);
-  border: 2px solid var(--metallic-orange);
-  border-radius: 15px;
-  padding: 20px;
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  animation: slideIn 0.5s ease-out;
-}
-
-.leaderboard-rank {
-  font-size: 24px;
-  font-weight: bold;
-  color: var(--metallic-orange);
-  min-width: 40px;
-  text-align: center;
-}
-
-.leaderboard-info {
-  flex-grow: 1;
-}
-
-.leaderboard-name {
-  font-size: 20px;
-  font-weight: bold;
-  color: white;
-  margin-bottom: 5px;
-}
-
-.leaderboard-balance {
-  font-size: 16px;
-  color: var(--metallic-gray);
-}
-
-@keyframes slideIn {
   from {
-    opacity: 0;
-    transform: translateY(20px);
+    box-shadow: 0 0 15px var(--metallic-orange);
   }
   to {
-    opacity: 1;
-    transform: translateY(0);
+    box-shadow: 0 0 25px var(--metallic-orange);
   }
+}
+
+/* Add equipped status indicator */
+.inventory-slot.equipped::after {
+  content: "EQUIPPED";
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: var(--metallic-orange);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+/* Add rarity color styles */
+.Common { color: #ffffff; }
+.Rare { color: #4CAF50; }
+.Epic { color: #9C27B0; }
+.Mythic { color: #2196F3; }
+.Legendary { color: #FFC107; }
+
+/* New styles for egg overlay and hatching */
+.egg-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: opacity 0.5s;
+}
+
+.egg-hatching {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.farm-egg.shaking {
+  width: 200px;
+  height: 200px;
+  animation: shakeEgg 0.5s infinite;
+}
+
+.hatched-pet {
+  display: none;
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.hatched-pet.reveal {
+  opacity: 1;
+  transform: scale(1);
+  transition: all 0.5s ease-out;
+}
+
+@keyframes shakeEgg {
+  0%, 100% { transform: rotate(-10deg) scale(1); }
+  25% { transform: rotate(15deg) scale(1.1); }
+  50% { transform: rotate(-15deg) scale(0.9); }
 }
 </style>
 </head>
@@ -1185,7 +1162,6 @@ body::-webkit-scrollbar-thumb:hover {
   <a href="#blackjack"><i class="fas fa-cards"></i> Blackjack</a>
   <a href="#streak"><i class="fas fa-fire"></i> Daily Streak</a>
   <a href="#inventory"><i class="fas fa-box-open"></i> Inventory</a>
-  <a href="#leaderboard"><i class="fas fa-trophy"></i> Leaderboard</a>
 </div>
 
 <div class="content">
@@ -1344,25 +1320,18 @@ body::-webkit-scrollbar-thumb:hover {
           <button onclick="buyItem('Chill Guy Rank', 10000)" class="rank-button">Purchase</button>
         </div>
         <div class="shop-item">
-          <div class="emoji">🥚</div>
+          <img src="https://freepngimg.com/thumb/egg/3-2-egg-png-picture.png" alt="Farm Egg" class="farm-egg">
           <h3>Farm Egg</h3>
           <p>Hatch a farm animal!</p>
           <p class="price">5000 EC</p>
           <button onclick="buyAndHatchEgg()">Purchase & Hatch</button>
         </div>
         <div class="shop-item">
-          <div class="emoji">🌟</div>
+          <img src="https://freepngimg.com/thumb/egg/3-2-egg-png-picture.png" alt="Eager Egg" class="farm-egg">
           <h3>Eager Egg</h3>
           <p>Hatch an Eager pet!</p>
           <p class="price">10000 EC</p>
-          <button onclick="buyAndHatchEgg('eager')">Purchase & Hatch</button>
-        </div>
-        <div class="shop-item">
-          <div class="emoji">🎁</div>
-          <h3>Brawl Box</h3>
-          <p>Unlock Brawl Stars pets!</p>
-          <p class="price">15000 EC</p>
-          <button onclick="buyAndHatchEgg('brawl')">Purchase & Hatch</button>
+          <button onclick="buyAndHatchEagerEgg()">Purchase & Hatch</button>
         </div>
       </div>
     </div>
@@ -1503,182 +1472,20 @@ body::-webkit-scrollbar-thumb:hover {
         <div class="next-reward" id="next-reward"></div>
       </div>
     </div>
-
-    <div id="leaderboard" style="display: none;">
-      <h1 class="section-title">EAGER LEADERBOARD</h1>
-      <div class="leaderboard-container">
-        <button onclick="addToLeaderboard()" class="leaderboard-add-btn">
-          Add to Leaderboard
-        </button>
-        <div class="leaderboard-list"></div>
-      </div>
-    </div>
   </div>
 </div>
 
 <script>
-const gun = Gun({
-  peers: ['https://gun-manhattan.herokuapp.com/gun'] // Public relay peer
-});
+const gun = Gun();
 let currentUsername = localStorage.getItem('currentUsername') || '';
 let balance = 100;
 let battlePassProgress = 0;
-let equippedPets = [];
 
 // Object to store transactions
 let transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
 
 // Gun DB for gift codes
 let giftCodesDB = gun.get('eagerGiftCodes'); // Changed from 'giftCodes' to make it globally shared
-
-function redeemCode() {
-  const codeInput = document.getElementById('gift-code');
-  const code = codeInput.value.trim();
-  const statusElement = document.getElementById('redeem-status');
-  
-  if (!code) {
-    statusElement.textContent = 'Please enter a code';
-    statusElement.style.color = '#f44336';
-    return;
-  }
-
-  // Check the code in Gun database
-  giftCodesDB.get(code).once((data) => {
-    if (!data || data.used) {
-      statusElement.textContent = 'Invalid or already used code';
-      statusElement.style.color = '#f44336';
-      return;
-    }
-
-    // Mark code as used
-    giftCodesDB.get(code).put({
-      used: true,
-      usedBy: currentUsername,
-      usedAt: Date.now()
-    });
-
-    // Award the gift
-    const reward = data.amount || 100; // Default to 100 EC if amount not specified
-    updateBalance(balance + reward);
-    
-    statusElement.textContent = `Success! Received ${reward} EC`;
-    statusElement.style.color = '#4CAF50';
-    codeInput.value = '';
-
-    // Add to transactions
-    transactions.push({
-      type: 'gift_code',
-      code: code,
-      amount: reward,
-      timestamp: Date.now()
-    });
-    localStorage.setItem('transactions', JSON.stringify(transactions));
-  });
-}
-
-// Function to handle EC purchases
-function buyEC(amount, cost) {
-  if (confirm(`Are you sure you want to buy ${amount} EC for $${cost}?`)) {
-    // Here we'd normally integrate with a payment processor
-    // For now, we'll just simulate the purchase
-    updateBalance(balance + amount);
-    
-    // Add to transactions
-    transactions.push({
-      type: 'purchase',
-      amount: amount,
-      cost: cost,
-      timestamp: Date.now()
-    });
-    localStorage.setItem('transactions', JSON.stringify(transactions));
-    
-    alert(`Successfully purchased ${amount} EC!`);
-  }
-}
-
-// Add this function to create new gift codes (admin only)
-function createGiftCode(code, amount) {
-  giftCodesDB.get(code).put({
-    code: code,
-    amount: amount,
-    created: Date.now(),
-    used: false
-  });
-}
-
-// Example gift code creation (you would normally do this through an admin panel)
-// createGiftCode('WELCOME2024', 1000);
-
-function checkUsername() {
-  const usernameInput = document.getElementById('username-input');
-  const username = usernameInput.value.trim();
-  
-  if (username.length < 3) {
-    alert('Username must be at least 3 characters long!');
-    return;
-  }
-  
-  currentUsername = username;
-  localStorage.setItem('currentUsername', username);
-  
-  // Set initial balance if new user
-  if (!localStorage.getItem(`${username}_balance`)) {
-    localStorage.setItem(`${username}_balance`, '100');
-    balance = 100;
-  } else {
-    balance = parseInt(localStorage.getItem(`${username}_balance`));
-  }
-  
-  // Hide welcome screen, show main content
-  document.getElementById('welcome').classList.add('hidden');
-  document.getElementById('main-content').classList.remove('hidden');
-  
-  // Show welcome back animation
-  const welcomeBack = document.createElement('div');
-  welcomeBack.className = 'welcome-back';
-  welcomeBack.innerHTML = `
-    <h1>Welcome back, ${username}!</h1>
-    <p>Balance: ${balance} EC</p>
-  `;
-  document.body.appendChild(welcomeBack);
-  
-  // Create some stars
-  for (let i = 0; i < 20; i++) {
-    const star = document.createElement('div');
-    star.className = 'stars';
-    star.style.left = `${Math.random() * 100}%`;
-    star.style.top = `${Math.random() * 100}%`;
-    star.textContent = '⭐';
-    welcomeBack.appendChild(star);
-  }
-  
-  // Remove welcome back animation after it's done
-  setTimeout(() => {
-    welcomeBack.remove();
-  }, 5000);
-  
-  // Initialize other features
-  loadInventory();
-  loadEquippedPets();
-  loadStreak();
-}
-
-// Modify initial visibility setup
-window.addEventListener('DOMContentLoaded', () => {
-  if (currentUsername) {
-    document.getElementById('welcome').classList.add('hidden');
-    document.getElementById('main-content').classList.remove('hidden');
-  } else {
-    document.getElementById('welcome').classList.remove('hidden');
-    document.getElementById('main-content').classList.add('hidden');
-  }
-});
-
-// Add/update updateBalance function
-function updateBalance(newBalance) {
-  balance = newBalance;
-  localStorage.setItem(`${currentUsername}_balance`, balance.toString());
-}
 
 if(currentUsername) {
   const savedBalance = localStorage.getItem(`${currentUsername}_balance`);
@@ -1691,6 +1498,7 @@ if(currentUsername) {
 }
 
 let inventory = [];
+let equippedPets = JSON.parse(localStorage.getItem(`${currentUsername}_equippedPets`) || '[]');
 
 function loadInventory() {
   const saved = localStorage.getItem(`${currentUsername}_inventory`);
@@ -1704,149 +1512,668 @@ function saveInventory() {
   localStorage.setItem(`${currentUsername}_inventory`, JSON.stringify(inventory));
 }
 
-function loadEquippedPets() {
-  const saved = localStorage.getItem(`${currentUsername}_equipped_pets`);
-  if (saved) {
-    equippedPets = JSON.parse(saved);
-  }
-  updateInventoryUI();
-}
-
 function saveEquippedPets() {
-  localStorage.setItem(`${currentUsername}_equipped_pets`, JSON.stringify(equippedPets));
+  localStorage.setItem(`${currentUsername}_equippedPets`, JSON.stringify(equippedPets));
 }
 
-function equipPet(index) {
+function toggleEquipPet(index) {
   const pet = inventory[index];
   if (!pet) return;
   
-  if (equippedPets.includes(index)) {
-    equippedPets = equippedPets.filter(i => i !== index);
+  // Find if any pet of the same type is already equipped
+  const existingEquippedIndex = equippedPets.findIndex(p => p.name === pet.name);
+  
+  if (existingEquippedIndex !== -1) {
+    // Unequip
+    equippedPets.splice(existingEquippedIndex, 1);
   } else {
+    // Equip
     if (equippedPets.length >= 2) {
       alert('You can only equip 2 pets at a time!');
       return;
     }
-    equippedPets.push(index);
+    equippedPets.push(pet);
   }
   
   saveEquippedPets();
   updateInventoryUI();
 }
 
+function getPetPerks(pet) {
+  switch(pet.name) {
+    case 'Pig': return '1% cashback';
+    case 'Cow': return '3% cashback';
+    case 'Chicken': return '5% cashback';
+    case 'Eager': return '7% cashback';
+    case 'Beager': return '8% cashback';
+    case 'Gentleman Eager': return '10% cashback, 2% luck';
+    case 'Black Eager': return '10% cashback, 4% luck';
+    case 'Mexican Eager': return '12% cashback, 5% luck';
+    case 'Anime Girl Eager': return '10% cashback, 7% luck';
+    default: return 'No perks';
+  }
+}
+
 function updateInventoryUI() {
   const grid = document.querySelector('.inventory-grid');
   grid.innerHTML = '';
 
+  // Create 50 slots
   for (let i = 0; i < 50; i++) {
     const slot = document.createElement('div');
     slot.className = 'inventory-slot';
     
     if (inventory[i]) {
       const pet = inventory[i];
-      const isEquipped = equippedPets.includes(i);
+      const isEquipped = equippedPets.some(p => p.name === pet.name);
       
-      let perkText = '';
-      if (pet.name === 'Skibidi') {
-        perkText = `${pet.cashback}% cashback, ${pet.luck}% luck`;
-      } else {
-        switch(pet.name) {
-          case 'Pig':
-            perkText = '1% cashback';
-            break;
-          case 'Cow':
-            perkText = '3% cashback';
-            break;
-          case 'Chicken':
-            perkText = '5% cashback';
-            break;
-          case 'Eager':
-            perkText = '7% cashback';
-            break;
-          case 'Beager':
-            perkText = '8% cashback';
-            break;
-          case 'Gentleman Eager':
-            perkText = '10% cashback, 2% luck';
-            break;
-          case 'Black Eager':
-            perkText = '10% cashback, 4% luck';
-            break;
-          case 'Mexican Eager':
-            perkText = '12% cashback, 5% luck';
-            break;
-          case 'Anime Girl Eager':
-            perkText = '10% cashback, 7% luck';
-            break;
-        }
+      if (isEquipped) {
+        slot.classList.add('equipped');
       }
       
       slot.innerHTML = `
-        <div class="pet-container ${isEquipped ? 'equipped' : ''}" onclick="equipPet(${i})">
-          <img src="${pet.image}" alt="${pet.name}" style="max-width: 80%; max-height: 80%; object-fit: contain;">
-          <div class="pet-info">
-            <div class="pet-name ${pet.rarity}">${pet.name}</div>
-            <div class="pet-rarity ${pet.rarity}">${pet.rarity.toUpperCase()}</div>
-            <div class="pet-perk">${perkText}</div>
-          </div>
-        </div>
+        <img src="${pet.image}" alt="${pet.name}">
+        <div class="pet-name">${pet.name}</div>
+        <div class="pet-rarity ${pet.rarity}">${pet.rarity}</div>
       `;
+      
+      slot.onclick = () => toggleEquipPet(i);
     }
     
     grid.appendChild(slot);
   }
 }
 
-function calculateEquippedPerks() {
-  let totalCashback = 0;
-  let totalLuck = 0;
+function buyAndHatchEgg() {
+  if (balance < 5000) {
+    alert('Not enough EC!');
+    return;
+  }
   
-  equippedPets.forEach(index => {
-    const pet = inventory[index];
-    if (!pet) return;
+  if (inventory.length >= 50) {
+    alert('Inventory is full!');
+    return;
+  }
+
+  updateBalance(balance - 5000);
+  
+  const overlay = document.createElement('div');
+  overlay.className = 'egg-overlay';
+  
+  const hatchingContainer = document.createElement('div');
+  hatchingContainer.className = 'egg-hatching';
+  
+  const egg = document.createElement('img');
+  egg.src = 'https://freepngimg.com/thumb/egg/3-2-egg-png-picture.png';
+  egg.className = 'farm-egg shaking';
+  
+  const hatchedPet = document.createElement('img');
+  hatchedPet.className = 'hatched-pet';
+  
+  hatchingContainer.appendChild(egg);
+  hatchingContainer.appendChild(hatchedPet);
+  overlay.appendChild(hatchingContainer);
+  document.body.appendChild(overlay);
+  
+  setTimeout(() => {
+    const random = Math.random();
+    let pet;
     
-    if (pet.name === 'Skibidi') {
-      totalCashback += pet.cashback;
-      totalLuck += pet.luck;
-    } else {
-      switch(pet.name) {
-        case 'Pig':
-          totalCashback += 1;
-          break;
-        case 'Cow':
-          totalCashback += 3;
-          break;
-        case 'Chicken':
-          totalCashback += 5;
-          break;
-        case 'Eager':
-          totalCashback += 7;
-          break;
-        case 'Beager':
-          totalCashback += 8;
-          break;
-        case 'Gentleman Eager':
-          totalCashback += 10;
-          totalLuck += 2;
-          break;
-        case 'Black Eager':
-          totalCashback += 10;
-          totalLuck += 4;
-          break;
-        case 'Mexican Eager':
-          totalCashback += 12;
-          totalLuck += 5;
-          break;
-        case 'Anime Girl Eager':
-          totalCashback += 10;
-          totalLuck += 7;
-          break;
+    if (random < 0.6) { // 60% chance for pig
+      pet = {
+        name: 'Pig',
+        image: 'https://static.vecteezy.com/system/resources/previews/011/209/951/non_2x/cute-cartoon-pig-in-farm-free-png.png',
+        rarity: 'Common'
+      };
+    } else if (random < 0.9) { // 30% chance for cow
+      pet = {
+        name: 'Cow',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/2/21/Cow_cartoon_04.svg',
+        rarity: 'Rare'
+      };
+    } else { // 10% chance for chicken
+      pet = {
+        name: 'Chicken',
+        image: 'https://png.pngtree.com/png-vector/20230302/ourmid/pngtree-happy-cartoon-hen-vector-png-image_6625859.png',
+        rarity: 'Epic'
+      };
+    }
+    
+    egg.style.display = 'none';
+    hatchedPet.src = pet.image;
+    hatchedPet.style.display = 'block';
+    
+    setTimeout(() => {
+      hatchedPet.classList.add('reveal');
+    }, 100);
+    
+    inventory.push(pet);
+    saveInventory();
+    updateInventoryUI();
+    
+    setTimeout(() => {
+      overlay.style.opacity = '0';
+      setTimeout(() => {
+        overlay.remove();
+        alert(`🎉 Congratulations! You hatched a ${pet.rarity} ${pet.name}!`);
+      }, 500);
+    }, 2000);
+  }, 2000);
+}
+
+function buyAndHatchEagerEgg() {
+  if (balance < 10000) {
+    alert('Not enough EC!');
+    return;
+  }
+  
+  if (inventory.length >= 50) {
+    alert('Inventory is full!');
+    return;
+  }
+
+  updateBalance(balance - 10000);
+  
+  const overlay = document.createElement('div');
+  overlay.className = 'egg-overlay';
+  
+  const hatchingContainer = document.createElement('div');
+  hatchingContainer.className = 'egg-hatching';
+  
+  const egg = document.createElement('img');
+  egg.src = 'https://freepngimg.com/thumb/egg/3-2-egg-png-picture.png';
+  egg.className = 'farm-egg shaking';
+  
+  const hatchedPet = document.createElement('img');
+  hatchedPet.className = 'hatched-pet';
+  
+  hatchingContainer.appendChild(egg);
+  hatchingContainer.appendChild(hatchedPet);
+  overlay.appendChild(hatchingContainer);
+  document.body.appendChild(overlay);
+  
+  setTimeout(() => {
+    const random = Math.random();
+    let pet;
+    
+    if (random < 0.5) { // 50% chance for Eager
+      pet = {
+        name: 'Eager',
+        image: 'path/to/eager/image.png',
+        rarity: 'Epic'
+      };
+    } else if (random < 0.8) { // 30% chance for Beager
+      pet = {
+        name: 'Beager',
+        image: 'path/to/beager/image.png',
+        rarity: 'Mythic'
+      };
+    } else if (random < 0.95) { // 15% chance for Gentleman Eager
+      pet = {
+        name: 'Gentleman Eager',
+        image: 'path/to/gentleman/image.png',
+        rarity: 'Legendary'
+      };
+    } else { // 5% chance for special pets
+      const specialPets = [
+        {
+          name: 'Black Eager',
+          image: 'path/to/black/image.png',
+          rarity: 'Legendary'
+        },
+        {
+          name: 'Mexican Eager',
+          image: 'path/to/mexican/image.png',
+          rarity: 'Legendary'
+        },
+        {
+          name: 'Anime Girl Eager',
+          image: 'path/to/anime/image.png',
+          rarity: 'Legendary'
+        }
+      ];
+      pet = specialPets[Math.floor(Math.random() * specialPets.length)];
+    }
+    
+    egg.style.display = 'none';
+    hatchedPet.src = pet.image;
+    hatchedPet.style.display = 'block';
+    
+    setTimeout(() => {
+      hatchedPet.classList.add('reveal');
+    }, 100);
+    
+    inventory.push(pet);
+    saveInventory();
+    updateInventoryUI();
+    
+    setTimeout(() => {
+      overlay.style.opacity = '0';
+      setTimeout(() => {
+        overlay.remove();
+        alert(`🎉 Congratulations! You hatched a ${pet.rarity} ${pet.name}!`);
+      }, 500);
+    }, 2000);
+  }, 2000);
+}
+
+// Load inventory on page load
+if (currentUsername) {
+  loadInventory();
+}
+
+// Other existing functions...
+
+function loadPurchasedRanks() {
+  const saved = localStorage.getItem(`${currentUsername}_ranks`);
+  return saved ? JSON.parse(saved) : {};
+}
+
+function savePurchasedRanks(ranks) {
+  localStorage.setItem(`${currentUsername}_ranks`, JSON.stringify(ranks));
+}
+
+function loadEquippedRank() {
+  return localStorage.getItem(`${currentUsername}_equipped_rank`);
+}
+
+function saveEquippedRank(rank) {
+  localStorage.setItem(`${currentUsername}_equipped_rank`, rank);
+}
+
+function updateBalance(newBalance) {
+  balance = newBalance;
+  localStorage.setItem(`${currentUsername}_balance`, balance);
+  
+  const balanceDisplay = document.createElement('div');
+  balanceDisplay.style.position = 'fixed';
+  balanceDisplay.style.top = '20px';
+  balanceDisplay.style.right = '20px';
+  balanceDisplay.style.background = 'var(--metallic-orange)';
+  balanceDisplay.style.padding = '10px 20px';
+  balanceDisplay.style.borderRadius = '8px';
+  balanceDisplay.style.fontWeight = 'bold';
+  balanceDisplay.style.zIndex = '1000';
+  balanceDisplay.textContent = `Balance: ${balance} EC`;
+  
+  const existingBalance = document.querySelector('.balance-display');
+  if (existingBalance) {
+    existingBalance.remove();
+  }
+  
+  balanceDisplay.classList.add('balance-display');
+  document.body.appendChild(balanceDisplay);
+}
+
+function unlockBattlePassItem(level) {
+  const prices = [20, 25, 30, 35, 40, 45, 50];
+  const items = ["High Five", "Fist Bump", "Hand Shake", "Pat on the Back", 
+                "Round of Applause", "The Book Eager Chapter 1", "Mystery Chest"];
+  
+  if (level !== battlePassProgress) {
+    alert("Complete previous items first!");
+    return;
+  }
+  
+  const price = prices[level];
+  
+  if (balance >= price) {
+    if (confirm(`Unlock ${items[level]} for ${price} EC?`)) {
+      updateBalance(balance - price);
+      battlePassProgress++;
+      saveBattlePassProgress();
+      
+      // If it's the final chest
+      if (level === 6) {
+        const rewards = [0, 20, 40, 50, 100, 250];
+        const reward = rewards[Math.floor(Math.random() * rewards.length)];
+        updateBalance(balance + reward);
+        alert(`You got ${reward} EC from the Mystery Chest!`);
       }
+      
+      // Update UI with new style
+      document.querySelectorAll('.battle-pass-item').forEach((item, index) => {
+        if (index < battlePassProgress) {
+          item.classList.add('completed');
+          item.classList.remove('locked');
+        } else if (index === battlePassProgress) {
+          item.classList.remove('locked');
+        } else {
+          item.classList.add('locked');
+        }
+      });
+      
+      alert(`Successfully unlocked ${items[level]}!`);
+    }
+  } else {
+    alert('Not enough EC!');
+  }
+}
+
+// Save battle pass progress
+function saveBattlePassProgress() {
+  localStorage.setItem(`${currentUsername}_battlepass`, battlePassProgress);
+}
+
+// Load battle pass progress
+function loadBattlePassProgress() {
+  const saved = localStorage.getItem(`${currentUsername}_battlepass`);
+  if (saved) {
+    battlePassProgress = parseInt(saved);
+    requestAnimationFrame(() => {
+      // Wait for next frame to ensure elements exist
+      const items = document.querySelectorAll('.battle-pass-item');
+      if (items) {
+        items.forEach((item, index) => {
+          if (index < battlePassProgress) {
+            item.classList.add('completed');
+            item.classList.remove('locked');
+          } else if (index === battlePassProgress) {
+            item.classList.remove('locked');
+          } else {
+            item.classList.add('locked');
+          }
+        });
+      }
+    });
+  }
+}
+
+// Function to gift EC to users
+function giftEC() {
+  // Empty function to avoid errors
+}
+
+function generateGiftCode() {
+  if (currentUsername !== 'EagerADMIN') return;
+  
+  const amount = parseInt(document.getElementById('code-amount').value);
+  if (!amount || amount <= 0) {
+    alert('Please enter a valid EC amount');
+    return;
+  }
+
+  const code = Math.random().toString(36).substring(2, 10).toUpperCase();
+  
+  // Store the code with global accessibility
+  giftCodesDB.get(code).put({
+    amount: amount,
+    active: true,
+    created: new Date().toISOString(),
+    createdBy: 'EagerADMIN'
+  }, (ack) => {
+    if (ack.err) {
+      alert('Error generating code. Please try again.');
+      return;
+    }
+    
+    document.getElementById('generated-code').textContent = `Generated Code: ${code}`;
+    document.getElementById('generated-code').style.color = '#4CAF50';
+    document.getElementById('code-amount').value = '';
+    
+    // Update the active codes list
+    updateActiveCodesList();
+  });
+}
+
+function updateActiveCodesList() {
+  const list = document.getElementById('active-codes-list');
+  if (!list || currentUsername !== 'EagerADMIN') return;
+  
+  list.innerHTML = ''; // Clear existing list
+  
+  giftCodesDB.map().once((data, code) => {
+    if (data && data.active) {
+      const codeItem = document.createElement('div');
+      codeItem.className = 'code-item';
+      codeItem.innerHTML = `
+        <span>${code} (${data.amount} EC)</span>
+        <button onclick="deleteCode('${code}')">Delete</button>
+      `;
+      list.appendChild(codeItem);
     }
   });
-  
-  return { cashback: totalCashback, luck: totalLuck };
 }
+
+function deleteCode(code) {
+  if (currentUsername !== 'EagerADMIN') return;
+  
+  giftCodesDB.get(code).put({
+    active: false,
+    deletedAt: new Date().toISOString(),
+    deletedBy: 'EagerADMIN'
+  });
+  
+  updateActiveCodesList();
+}
+
+function redeemCode() {
+  const code = document.getElementById('gift-code').value.toUpperCase();
+  const status = document.getElementById('redeem-status');
+  
+  if (!code) {
+    status.textContent = 'Please enter a code';
+    return;
+  }
+
+  // Special case for SIGMAEAGER69
+  if (code === 'SIGMAEAGER69') {
+    const specialCodeKey = `${currentUsername}_SIGMAEAGER69`;
+    if (localStorage.getItem(specialCodeKey)) {
+      status.textContent = 'You have already redeemed this code!';
+      status.style.color = '#f44336';
+      return;
+    }
+    
+    updateBalance(balance + 10000);
+    status.textContent = '🎉 SECRET CODE: You received 10,000 EC! Welcome to the elite! 🎉';
+    status.style.color = '#4CAF50';
+    document.getElementById('gift-code').value = '';
+    return;
+  }
+  
+  // Check if user has already redeemed this code
+  const userRedemptionKey = `${currentUsername}_${code}`;
+  if (localStorage.getItem(userRedemptionKey)) {
+    status.textContent = 'You have already redeemed this code!';
+    status.style.color = '#f44336';
+    return;
+  }
+  
+  giftCodesDB.get(code).once((giftCode) => {
+    if (!giftCode || !giftCode.active) {
+      status.textContent = 'Invalid or expired code';
+      status.style.color = '#f44336';
+      return;
+    }
+    
+    // Add the EC amount to user's balance
+    updateBalance(balance + giftCode.amount);
+    
+    // Mark code as redeemed for this user
+    localStorage.setItem(userRedemptionKey, 'true');
+    
+    // Record the transaction
+    status.textContent = `Successfully redeemed ${giftCode.amount} EC!`;
+    status.style.color = '#4CAF50';
+    document.getElementById('gift-code').value = '';
+  });
+}
+
+// Updated openCrate function
+function openCrate(type) {
+  // First load purchased ranks
+  const purchasedRanks = loadPurchasedRanks();
+  
+  // Check if user has the corresponding rank
+  const rankMap = {
+    'vip': 'VIP Rank',
+    'mvp': 'MVP Rank',
+    'cheese': 'Cheese Rank',
+    'eager': 'Eager Rank',
+    'chillguy': 'Chill Guy Rank'
+  };
+  
+  const requiredRank = rankMap[type];
+  
+  if (!purchasedRanks[requiredRank]) {
+    alert(`You need to purchase the ${requiredRank} to open this crate!`);
+    return;
+  }
+
+  if (balance < 100) {
+    alert('Not enough EC! You need 100 EC to open this crate.');
+    return;
+  }
+
+  const crateElement = Array.from(document.querySelectorAll('.crate')).find(crate => 
+    crate.querySelector('button').onclick.toString().includes(type)
+  );
+  crateElement.classList.add('opening');
+  
+  setTimeout(() => {
+    crateElement.classList.remove('opening');
+  }, 500);
+
+  updateBalance(balance - 100);
+  let reward = 0;
+
+  switch(type) {
+    case 'vip':
+      const vipRewards = [10, 30, 100, 400];
+      reward = vipRewards[Math.floor(Math.random() * vipRewards.length)];
+      break;
+    case 'mvp':
+      const mvpRewards = [50, 100, 200];
+      reward = mvpRewards[Math.floor(Math.random() * mvpRewards.length)];
+      break;
+    case 'cheese':
+      reward = Math.random() < 0.5 ? 0 : 1000;
+      break;
+    case 'eager':
+      reward = Math.floor(Math.random() * (500 - 50 + 1)) + 50;
+      break;
+    case 'chillguy':
+      const chillRewards = [95, 100, 1000];
+      reward = chillRewards[Math.floor(Math.random() * chillRewards.length)];
+      break;
+  }
+
+  updateBalance(balance + reward);
+  
+  // Create a special alert for the reward
+  const message = reward === 0 
+    ? '😢 Better luck next time!' 
+    : `🎉 CONGRATULATIONS! 🎉\n\nYou won ${reward} EC from the ${type.toUpperCase()} Crate!`;
+    
+  alert(message);
+}
+
+function checkUsername() {
+  const username = document.getElementById('username-input').value;
+  if (!username) return;
+
+  gun.get(`users/${username}`).once((data) => {
+    if (data) {
+      alert('Username already taken!');
+    } else {
+      gun.get(`users/${username}`).put({ username });
+      currentUsername = username;
+      localStorage.setItem('currentUsername', username);
+      const savedBalance = localStorage.getItem(`${username}_balance`);
+      if (savedBalance) {
+        updateBalance(parseInt(savedBalance));
+      } else {
+        updateBalance(100);
+      }
+      document.getElementById('welcome').classList.add('hidden');
+      document.getElementById('main-content').classList.remove('hidden');
+      document.getElementById('main-content').classList.add('slide-in');
+    }
+  });
+}
+
+function showWelcomeBack() {
+  if (currentUsername) {
+    const welcomeBack = document.createElement('div');
+    welcomeBack.className = 'welcome-back';
+    
+    // Add random stars
+    for (let i = 0; i < 20; i++) {
+      const star = document.createElement('span');
+      star.className = 'stars';
+      star.textContent = Math.random() > 0.5 ? '⭐' : '💖';
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.top = Math.random() * 100 + 'vh';
+      star.style.animationDelay = Math.random() * 2 + 's';
+      welcomeBack.appendChild(star);
+    }
+    
+    welcomeBack.innerHTML += `
+      <h1>Welcome Back ${currentUsername}! ⭐</h1>
+      <p>Welcome to the official Eager shop! Here you can spend your Eager Coins (EC) 
+         on various rewards and try your luck at the emoji spinner! 💖</p>
+    `;
+    
+    document.body.appendChild(welcomeBack);
+    
+    setTimeout(() => {
+      welcomeBack.remove();
+    }, 5000);
+  }
+}
+
+window.addEventListener('load', () => {
+  if (currentUsername) {
+    setTimeout(() => {
+      loadBattlePassProgress();
+      loadStreak(); // Added streak loading
+      loadInventory(); // Load inventory on page load
+    }, 100);
+    
+    showWelcomeBack();
+    document.getElementById('welcome').classList.add('hidden');
+    document.getElementById('main-content').classList.remove('hidden');
+    document.getElementById('main-content').classList.add('slide-in');
+    
+    // Update rank buttons based on purchases
+    const purchasedRanks = loadPurchasedRanks();
+    const equippedRank = loadEquippedRank();
+    
+    document.querySelectorAll('.shop-item').forEach(item => {
+      const rankName = item.querySelector('h3').textContent;
+      const button = item.querySelector('button');
+      if (purchasedRanks[rankName]) {
+        button.textContent = rankName === equippedRank ? 'UNEQUIP' : 'EQUIP';
+      }
+    });
+  } else {
+    document.getElementById('main-content').classList.add('hidden');
+    document.getElementById('welcome').classList.remove('hidden');
+  }
+});
+
+document.querySelectorAll('.sidebar a').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const targetId = link.getAttribute('href').substring(1);
+    
+    ['home', 'wheel', 'shop', 'crates', 'buy', 'slots', 'blackjack', 'streak', 'inventory'].forEach(id => {
+      const section = document.getElementById(id);
+      if (section) {
+        section.style.display = 'none';
+      }
+    });
+    
+    const targetSection = document.getElementById(targetId);
+    if (targetSection) {
+      targetSection.style.display = 'block';
+      targetSection.scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+  });
+});
 
 function spin() {
   const betAmount = parseInt(document.getElementById('bet-amount').value);
@@ -1859,11 +2186,6 @@ function spin() {
     alert('Not enough EC!');
     return;
   }
-
-  const perks = calculateEquippedPerks();
-  const baseChance = 0.5;
-  const luckBonus = perks.luck * 0.01;
-  const winChance = Math.min(0.95, baseChance + luckBonus); 
 
   const spinButton = document.querySelector('.bet-container button');
   spinButton.disabled = true;
@@ -1885,19 +2207,15 @@ function spin() {
 
   setTimeout(() => {
     clearInterval(intervalId);
-    const result = Math.random() < winChance;
+    const result = Math.random() < 0.5;
     
     if (result) {
       updateBalance(balance + betAmount);
       document.getElementById('spinner-result').textContent = '🎉 You won double! 🎉';
       document.getElementById('spinner-result').style.color = '#4CAF50';
     } else {
-      const cashbackAmount = Math.round((betAmount * (perks.cashback / 100)) * 100) / 100;
-      updateBalance(balance - betAmount + cashbackAmount);
-      document.getElementById('spinner-result').innerHTML = `
-        ❌ You lost! ❌<br>
-        Got ${cashbackAmount} EC cashback (${perks.cashback}%)
-      `;
+      updateBalance(balance - betAmount);
+      document.getElementById('spinner-result').textContent = '❌ You lost everything! ❌';
       document.getElementById('spinner-result').style.color = '#f44336';
     }
     
@@ -1911,7 +2229,7 @@ function spinSlots() {
     alert('Please enter a valid bet amount!');
     return;
   }
-  
+
   if (betAmount > balance) {
     alert('Not enough EC!');
     return;
@@ -1944,13 +2262,16 @@ function spinSlots() {
   setTimeout(() => {
     button.disabled = false;
     
+    // Check for wins
     if (results[0] === results[1] && results[1] === results[2]) {
+      // Jackpot - 5x
       const winAmount = betAmount * 5;
       updateBalance(balance + winAmount);
       document.getElementById('slot-result').innerHTML = `
         <h2 style="color: #4CAF50">JACKPOT! You won ${winAmount} EC! 🎉</h2>
       `;
     } else if (results[0] === results[1] || results[1] === results[2]) {
+      // Two matching - 2x
       const winAmount = betAmount * 2;
       updateBalance(balance + winAmount);
       document.getElementById('slot-result').innerHTML = `
@@ -1965,79 +2286,31 @@ function spinSlots() {
 }
 
 function buyEC(amount, cost) {
-  if (confirm(`Are you sure you want to buy ${amount} EC for $${cost}?`)) {
-    // Here we'd normally integrate with a payment processor
-    // For now, we'll just simulate the purchase
+  if (confirm(`Are you sure you want to spend $${cost} for ${amount} EC?`)) {
     updateBalance(balance + amount);
-    
-    // Add to transactions
-    transactions.push({
-      type: 'purchase',
-      amount: amount,
-      cost: cost,
-      timestamp: Date.now()
-    });
-    localStorage.setItem('transactions', JSON.stringify(transactions));
-    
-    alert(`Successfully purchased ${amount} EC!`);
+    alert(`Thank you for your purchase! ${amount} EC have been added to your balance.`);
   }
-}
-
-function buyAndHatchEgg(type = 'farm') {
-  let cost = type === 'farm' ? 5000 : type === 'eager' ? 10000 : 15000;
-  let pets = [];
-  
-  if (balance < cost) {
-    alert('Not enough EC!');
-    return;
-  }
-
-  if (type === 'farm') {
-    pets = [
-      {name: 'Pig', image: '🐷', rarity: 'common'},
-      {name: 'Cow', image: '🐮', rarity: 'uncommon'},
-      {name: 'Chicken', image: '🐔', rarity: 'rare'}
-    ];
-  } else if (type === 'eager') {
-    pets = [
-      {name: 'Eager', image: '😊', rarity: 'rare'},
-      {name: 'Beager', image: '🐝', rarity: 'epic'},
-      {name: 'Gentleman Eager', image: '🎩', rarity: 'legendary'},
-      {name: 'Black Eager', image: '🖤', rarity: 'mythic'},
-      {name: 'Mexican Eager', image: '🌮', rarity: 'mythic'},
-      {name: 'Anime Girl Eager', image: '👧', rarity: 'legendary'}
-    ];
-  } else if (type === 'brawl') {
-    pets = [
-      {name: 'Tick', image: '🤖', rarity: 'super rare', cashback: 15, luck: 4},
-      {name: 'Mico', image: '🐒', rarity: 'mythic', cashback: 15, luck: 6}
-    ];
-  }
-
-  updateBalance(balance - cost);
-  
-  const randomPet = pets[Math.floor(Math.random() * pets.length)];
-  inventory.push(randomPet);
-  saveInventory();
-  
-  alert(`🎉 You hatched a ${randomPet.rarity} ${randomPet.name}!`);
-  updateInventoryUI();
 }
 
 function buyItem(rankName, cost) {
   const purchasedRanks = loadPurchasedRanks();
   
+  // If already purchased, handle equip/unequip
   if (purchasedRanks[rankName]) {
     const equippedRank = loadEquippedRank();
     if (equippedRank === rankName) {
+      // Unequip
       saveEquippedRank(null);
+      // Find button using standard JS
       const shopItem = Array.from(document.querySelectorAll('.shop-item')).find(item => 
         item.querySelector('h3').textContent === rankName
       );
       const button = shopItem && shopItem.querySelector('button');
       if (button) button.textContent = 'EQUIP';
     } else {
+      // Equip
       saveEquippedRank(rankName);
+      // Update all buttons
       document.querySelectorAll('.shop-item').forEach(item => {
         const itemRankName = item.querySelector('h3').textContent;
         const button = item.querySelector('button');
@@ -2053,36 +2326,26 @@ function buyItem(rankName, cost) {
   if (balance >= cost) {
     if (confirm(`Are you sure you want to buy ${rankName} for ${cost} EC?`)) {
       updateBalance(balance - cost);
+      
+      // Save the purchase
       purchasedRanks[rankName] = true;
       savePurchasedRanks(purchasedRanks);
+      
+      // Automatically equip the new rank
       saveEquippedRank(rankName);
+      
+      // Update button text using standard JS
       const shopItem = Array.from(document.querySelectorAll('.shop-item')).find(item => 
         item.querySelector('h3').textContent === rankName
       );
       const button = shopItem && shopItem.querySelector('button');
       if (button) button.textContent = 'UNEQUIP';
+      
       alert(`Successfully purchased ${rankName}!`);
     }
   } else {
     alert('Not enough EC!');
   }
-}
-
-// Load purchased ranks
-function loadPurchasedRanks() {
-  return JSON.parse(localStorage.getItem(`${currentUsername}_purchasedRanks`) || '{}');
-}
-
-function savePurchasedRanks(ranks) {
-  localStorage.setItem(`${currentUsername}_purchasedRanks`, JSON.stringify(ranks));
-}
-
-function loadEquippedRank() {
-  return localStorage.getItem(`${currentUsername}_equippedRank`);
-}
-
-function saveEquippedRank(rank) {
-  localStorage.setItem(`${currentUsername}_equippedRank`, rank);
 }
 
 // Blackjack functions
@@ -2098,7 +2361,7 @@ function createDeck() {
       deck.push(i);
     }
   }
-  // Face cards
+// Face cards
   for (let j = 0; j < 4; j++) {
     deck.push(10); // Jack
     deck.push(10); // Queen
@@ -2150,11 +2413,13 @@ function startBlackjack() {
   currentBet = betAmount;
   updateBalance(balance - betAmount);
   
+  // Reset and start new game
   createDeck();
   shuffleDeck();
   playerHand = [drawCard(), drawCard()];
   dealerHand = [drawCard(), drawCard()];
   
+  // Update UI
   document.getElementById('deal-button').style.display = 'none';
   document.querySelector('.action-buttons').style.display = 'flex';
   document.getElementById('blackjack-bet').disabled = true;
@@ -2166,14 +2431,17 @@ function updateBlackjackUI() {
   const dealerCards = document.getElementById('dealer-cards');
   const playerCards = document.getElementById('player-cards');
   
+  // Clear previous cards
   dealerCards.innerHTML = '';
   playerCards.innerHTML = '';
   
+  // Show dealer's first card and hide second card
   dealerCards.innerHTML = `
     <div class="card" style="animation-delay: 0.1s">${dealerHand[0]}</div>
     <div class="card hidden" style="animation-delay: 0.2s">?</div>
   `;
   
+  // Show all player cards with staggered animation
   playerHand.forEach((card, index) => {
     playerCards.innerHTML += `
       <div class="card" style="animation-delay: ${0.3 + (index * 0.1)}s">
@@ -2197,6 +2465,7 @@ function hit() {
 }
 
 function stand() {
+  // Dealer's turn
   while (calculateTotal(dealerHand) < 15) {
     dealerHand.push(drawCard());
   }
@@ -2208,6 +2477,7 @@ function endGame(reason) {
   const dealerCards = document.getElementById('dealer-cards');
   const result = document.getElementById('blackjack-result');
   
+  // Show all dealer cards with animation
   dealerCards.innerHTML = '';
   dealerHand.forEach((card, index) => {
     dealerCards.innerHTML += `
@@ -2239,15 +2509,9 @@ function endGame(reason) {
     }
   }
   
-  const perks = calculateEquippedPerks();
-  if (reason === 'bust' || (reason === 'stand' && dealerTotal > playerTotal && dealerTotal <= 21)) {
-    const cashbackAmount = Math.round((currentBet * (perks.cashback / 100)) * 100) / 100;
-    updateBalance(balance + cashbackAmount);
-    message += `\nGot ${cashbackAmount} EC cashback (${perks.cashback}%)`;
-  }
-  
   result.textContent = message;
   
+  // Reset for next game
   document.getElementById('deal-button').style.display = 'block';
   document.querySelector('.action-buttons').style.display = 'none';
   document.getElementById('blackjack-bet').disabled = false;
@@ -2272,6 +2536,7 @@ function loadStreak() {
     const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
     
     if (daysDiff < 1) {
+      // Already claimed today
       if (streakButton) {
         streakButton.disabled = true;
         streakButton.textContent = 'Already Claimed Today';
@@ -2282,6 +2547,7 @@ function loadStreak() {
         nextRewardElement.textContent = `Next Reward: ${nextReward} EC (Available ${nextClaimDate.toLocaleTimeString()})`;
       }
     } else if (daysDiff > 1) {
+      // Streak broken
       localStorage.setItem(`${currentUsername}_streakCount`, '0');
       if (streakCountElement) {
         streakCountElement.textContent = '0';
@@ -2308,14 +2574,18 @@ function claimDailyStreak() {
     }
   }
   
+  // Calculate reward
   const reward = 10 + (streakCount * 5);
   streakCount++;
   
+  // Update storage
   localStorage.setItem(`${currentUsername}_lastStreak`, now.toISOString());
   localStorage.setItem(`${currentUsername}_streakCount`, streakCount);
   
+  // Update balance
   updateBalance(balance + reward);
   
+  // Update UI
   document.getElementById('streak-count').textContent = streakCount;
   document.getElementById('streak-button').disabled = true;
   document.getElementById('streak-button').textContent = 'Already Claimed Today';
@@ -2325,126 +2595,11 @@ function claimDailyStreak() {
   document.getElementById('next-reward').textContent = 
     `Next Reward: ${nextReward} EC (Available ${nextClaimDate.toLocaleTimeString()})`;
   
+  // Show success message
   alert(`🔥 Daily Reward Claimed!\nStreak: ${streakCount} day(s)\nReward: ${reward} EC`);
 }
 
-// Load inventory on page load
-if (currentUsername) {
-  loadInventory();
-  loadEquippedPets(); // Load equipped pets
-}
-
-// Leaderboard functions
-function updateLeaderboard() {
-  const leaderboardList = document.querySelector('.leaderboard-list');
-  if (!leaderboardList) return;
-  
-  leaderboardList.innerHTML = '';
-  const entries = [];
-  const uniqueUsernames = new Set();
-  
-  gun.get('eagerLeaderboard').map().once(function(data, id) {
-    if (!data || uniqueUsernames.has(data.username)) return;
-    
-    uniqueUsernames.add(data.username);
-    entries.push({
-      username: data.username,
-      balance: data.balance
-    });
-    
-    // Sort entries by balance in descending order
-    entries.sort((a, b) => b.balance - a.balance);
-    
-    // Clear and rebuild leaderboard with sorted entries
-    leaderboardList.innerHTML = '';
-    entries.forEach((entry, index) => {
-      const entryElement = document.createElement('div');
-      entryElement.className = 'leaderboard-entry';
-      
-      // Add special styling for top 3 places
-      let rankStyle = '';
-      if (index === 0) rankStyle = 'color: gold; font-weight: bold;';
-      else if (index === 1) rankStyle = 'color: silver; font-weight: bold;';
-      else if (index === 2) rankStyle = 'color: #cd7f32; font-weight: bold;';
-      
-      entryElement.innerHTML = `
-        <div class="leaderboard-rank" style="${rankStyle}">#${index + 1}</div>
-        <div class="leaderboard-info">
-          <div class="leaderboard-name">${entry.username}</div>
-          <div class="leaderboard-balance">${entry.balance} EC</div>
-        </div>
-      `;
-      
-      leaderboardList.appendChild(entryElement);
-    });
-  });
-}
-
-function addToLeaderboard() {
-  if (!currentUsername) {
-    alert('Please log in first!');
-    return;
-  }
-  
-  let existingEntry = false;
-  
-  gun.get('eagerLeaderboard').map().once(function(data, id) {
-    if (data && data.username === currentUsername) {
-      existingEntry = true;
-      gun.get('eagerLeaderboard').get(id).put({
-        username: currentUsername,
-        balance: balance,
-        lastUpdated: Date.now()
-      });
-      return;
-    }
-  });
-  
-  if (!existingEntry) {
-    gun.get('eagerLeaderboard').set({
-      username: currentUsername,
-      balance: balance,
-      created: Date.now(),
-      lastUpdated: Date.now()
-    });
-    alert('Successfully added to leaderboard!');
-  } else {
-    alert('Your balance has been updated on the leaderboard!');
-  }
-}
-
-// Add leaderboard to the sections array in the click handler
-document.querySelectorAll('.sidebar a').forEach(link => {
-  link.addEventListener('click', (e) => {
-    e.preventDefault();
-    const targetId = link.getAttribute('href').substring(1);
-    
-    ['home', 'wheel', 'shop', 'crates', 'buy', 'slots', 'blackjack', 'streak', 'inventory', 'leaderboard'].forEach(id => {
-      const section = document.getElementById(id);
-      if (section) {
-        section.style.display = 'none';
-      }
-    });
-    
-    const targetSection = document.getElementById(targetId);
-    if (targetSection) {
-      targetSection.style.display = 'block';
-      if (targetId === 'leaderboard') {
-        // Clear and reload leaderboard when section is opened
-        const leaderboardList = document.querySelector('.leaderboard-list');
-        if (leaderboardList) {
-          leaderboardList.innerHTML = '';
-          updateLeaderboard();
-        }
-      }
-      targetSection.scrollIntoView({
-        behavior: 'smooth'
-      });
-    }
-  });
-});
-
-// Load streak information on page load
+// Add streak initialization to window.addEventListener('load')
 if (currentUsername) {
   loadStreak();
 }
